@@ -6,16 +6,17 @@
 
 using namespace std;
 
+
 class LivingBeing {
 protected:
-    string name;
+    std::string name;
     int hp;
     int maxHp;
     int attack;
 
 public:
     LivingBeing(const string& name, int maxHp, int attack);
-    virtual ~LivingBeing() = default; // Virtueller Destruktor
+    virtual ~LivingBeing() = default;
 
     std::string getName() const;
     int getHp() const;
@@ -30,3 +31,4 @@ public:
 };
 
 #endif
+

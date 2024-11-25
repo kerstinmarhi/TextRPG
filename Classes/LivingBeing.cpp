@@ -1,11 +1,11 @@
 #include "LivingBeing.h"
 
-using namespace std;
+//using namespace std;
 
 LivingBeing::LivingBeing(const string& name, int maxHp, int attack)
-    : name(name), hp(maxHp), maxHp(maxHp), attack(attack) {}
+    : name(name), maxHp(maxHp), hp(maxHp), attack(attack) {}
 
-string LivingBeing::getName() const {
+std::string LivingBeing::getName() const {
     return name;
 }
 
@@ -28,12 +28,9 @@ bool LivingBeing::isAlive() const {
 void LivingBeing::takeDamage(int damage) {
     hp -= damage;
     if (hp < 0) hp = 0;
-    cout << name << " nimmt " << damage << " Schaden und hat jetzt " << hp << " HP übrig.\n";
 }
 
 void LivingBeing::heal(int amount) {
     hp += amount;
     if (hp > maxHp) hp = maxHp;
-    cout << name << " heilt sich um " << amount << " Punkte und hat jetzt " << hp << " HP.\n";
 }
-

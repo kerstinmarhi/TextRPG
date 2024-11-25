@@ -3,13 +3,12 @@
 
 #include "LivingBeing.h"
 
+using namespace std;
+
 class Monster : public LivingBeing {
 public:
-    // Konstruktor
-    Monster(const std::string& name, int maxHp, int attack);
-
-    // Implementierung der Angriffsmethode
+    Monster(const string& name, int maxHp, int attack);
     void attackAction(LivingBeing& target) override;
 };
 
-#endif // MONSTER_H
+#endif
