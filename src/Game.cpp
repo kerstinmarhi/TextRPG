@@ -11,6 +11,8 @@ void Game::start() {
 
 void Game::mainMenu() {
     int choice;
+
+    //Game loop
     do {
         cout << "\n--- Menu ---\n";
         cout << "1. Discover\n2. Exit Game\n";
@@ -22,7 +24,7 @@ void Game::mainMenu() {
                 explore();
                 break;
             case 2:
-                cout << "Game ends. Till we see again!" << endl;
+                cout << "Game ends. Till we meet again!" << endl;
                 break;
             default:
                 cout << "No such choice!" << endl;

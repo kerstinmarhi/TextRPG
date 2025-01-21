@@ -9,3 +9,9 @@ Level system and character building
 Items and treasure chests
 Simple GUI (optional)
 Save function (optional)
+
+Build with:
+make
+
+run with: 
+.\dungeon_rpg.exe
