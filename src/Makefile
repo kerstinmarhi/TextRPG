@@ -6,7 +6,7 @@ CXXFLAGS = -Wall -Wextra -std=c++17
 TARGET = dungeon_rpg
 
 # Quell- und Objektdateien
-SRCS = main.cpp Game.cpp Player.cpp Monster.cpp Item.cpp 
+SRCS = main.cpp Game.cpp Player.cpp Monster.cpp Item.cpp Room.cpp Dungeon.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 # Regel für die Erstellung der ausführbaren Datei
