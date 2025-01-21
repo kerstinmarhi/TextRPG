@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "Player.h"
+#include "Dungeon.h"
 
 class Game {
 public:
@@ -10,6 +11,7 @@ public:
 
 private:
     Player player; 
+    Dungeon dungeon;
     void mainMenu(); 
     void explore(); 
 };
