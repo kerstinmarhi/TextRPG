@@ -23,7 +23,7 @@ void Game::mainMenu() {
     //Game loop
     do {
         cout << "\n--- Menu ---\n";
-        cout << "1. Discover\n2. Exit Game\n";
+        cout << "1. Discover\n2. Player Stats\n3. Exit Game\n";
         cout << "Choose an option: ";
         cin >> choice;
 
@@ -32,12 +32,15 @@ void Game::mainMenu() {
                 explore();
                 break;
             case 2:
+                player.displayStats();
+                break;
+            case 3:
                 cout << "Game ends. Till we meet again!" << endl;
                 break;
             default:
                 cout << "No such choice!" << endl;
         }
-    } while (choice != 2);
+    } while (choice != 3);
 }
 
 void Game::initializeRooms() {
@@ -107,4 +110,5 @@ void Game::combat(Monster* monster) {
     } else {
         cout << "Game Over! You were defeated by " << monster->getName() << endl;
     }
+
 }

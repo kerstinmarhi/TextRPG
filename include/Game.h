@@ -4,21 +4,25 @@
 #include "Player.h"
 #include "Room.h"
 #include <vector>
+#include "Dungeon.h"
+
 
 class Game {
 private:
-    Player player;
     std::vector<Room*> rooms;
     Room* currentRoom;
-    void mainMenu();
-    void explore();
-    void initializeRooms();
-    void combat(Monster* monster);
+    Player player; 
+    Dungeon dungeon;
 
 public:
     Game();
     ~Game();
     void start();
+    void mainMenu(); 
+    void explore(); 
+    void initializeRooms();
+    void combat(Monster* monster);
+
 };
 
 #endif
