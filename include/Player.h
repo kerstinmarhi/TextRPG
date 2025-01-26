@@ -12,18 +12,22 @@ public:
     string getName() const;
     int getHealth() const;
     int getLevel() const;
-
+    int getAP() const;
     // Setter-methods
     void setName(const string& name);
     void setHealth(int health);
     void setLevel(int level);
-
+    void setAP(int attackPoints);
     void displayStats() const; // show player stats
+    void attack(Monster& monster) const;
+    void takeDamage(int damage);
+    bool isAlive() const;
 
 private:
     string name;
     int health;
     int level;
+    const int attackPoints = 20; // base attack damage
 };
 
 #endif

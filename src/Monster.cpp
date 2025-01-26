@@ -34,7 +34,9 @@ void Monster::takeDamage(int damage) {
     }
     cout << name << " has " << health << " health points left." << endl;
 }
-
+bool Monster::isAlive() const {
+    return health > 0;
+}
 void Monster::showMonster() const {
     cout << "Monster: " << name << endl;
     cout << "Description: " << description << endl;
