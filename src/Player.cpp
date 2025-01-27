@@ -1,5 +1,6 @@
 #include "../include/Player.h"
 #include <iostream>
+#include "../include/Monster.h"
 using namespace std;
 
 Player::Player(const string& name) : name(name), health(100), level(1) { }
@@ -39,4 +40,19 @@ void Player::displayStats() const {
     cout << "Name: " << name << "\n";
     cout << "Health: " << health << "\n";
     cout << "Level: " << level << "\n";
+}
+
+void Player::attack(Monster& monster) const {
+    cout << name << " attacks " << monster.getName() << " for " << attackPoints << " damage!" << endl;
+    monster.takeDamage(attackPoints);
+}
+
+void Player::takeDamage(int damage) {
+    health -= damage;
+    if (health < 0) health = 0;
+    cout << name << " takes " << damage << " damage! Health: " << health << endl;
+}
+
+bool Player::isAlive() const {
+    return health > 0;
 }

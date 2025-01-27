@@ -23,6 +23,8 @@ public:
     int getAttack() const;
     string getDescription() const;
 
+    bool isAlive() const;
+    
     void attack() const;
 
     void takeDamage(int damage);
