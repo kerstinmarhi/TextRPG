@@ -36,6 +36,10 @@ public:
     //Method to show item
     void showItem() const;
 
+    //overload operator
+    bool operator==(const Item& other) const;
+
+
 };
 
 #endif

@@ -50,7 +50,12 @@ void Item::showItem() const {
             cout << "Cursed Item" << endl;
             break;
         case ItemType::OTHER:
-            cout << "Don't know either ¯\_(ツ)_/¯" << endl;
+            cout << "Don't know" << endl;
             break;
     }
+}
+
+
+bool Item::operator==(const Item& other) const {
+    return name == other.name; // Two items are the same when they have identical names.
 }

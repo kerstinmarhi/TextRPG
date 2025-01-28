@@ -7,11 +7,12 @@ Dungeon::Dungeon() {
 }
 
 void Dungeon::generateRooms() {
-    // add Rooms to dungeon
-    rooms.emplace_back("Eingangshalle");
-    rooms.emplace_back("Schatzkammer");
-    rooms.emplace_back("Bossraum");
+    // adds rooms to dungeon
+    rooms.emplace_back("Eingangshalle", "Der Eingang zu einem mysteriösen Dungeon.");
+    rooms.emplace_back("Schatzkammer", "Ein Raum voller glänzender Schätze und Edelsteine.");
+    rooms.emplace_back("Bossraum", "Ein düsterer Raum, in dem eine große Gefahr lauert.");
 }
+
 
 void Dungeon::explore() {
     cout << "You explore the dungeon..." << endl;

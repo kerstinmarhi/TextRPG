@@ -23,7 +23,7 @@ void Game::mainMenu() {
     //Game loop
     do {
         cout << "\n--- Menu ---\n";
-        cout << "1. Discover\n2. Player Stats\n3. Exit Game\n";
+        cout << "1. Discover\n2. Player Stats\n3. Bag\n4. Exit Game\n";
         cout << "Choose an option: ";
         cin >> choice;
 
@@ -35,17 +35,20 @@ void Game::mainMenu() {
                 player.displayStats();
                 break;
             case 3:
+                player.openBag(); 
+                break;
+            case 4:
                 cout << "Game ends. Till we meet again!" << endl;
                 break;
             default:
-                cout << "No such choice!" << endl;
+                cout << "No such choice!";
         }
-    } while (choice != 3);
+    } while (choice != 4);
 }
 
 void Game::initializeRooms() {
-    Room* entrance = new Room("You are at the dungeon entrance. Torches flicker on the walls.");
-    Room* hallway = new Room("A long dark hallway stretches before you.");
+    Room* entrance = new Room("The Beginning", "You are at the dungeon entrance. Torches flicker on the walls.");
+    Room* hallway = new Room("Endless Darkness", "A long dark hallway stretches before you.");
     
     entrance->addConnection(hallway);
     hallway->addConnection(entrance);
@@ -72,16 +75,16 @@ void Game::explore() {
     }
 
     vector<Room*> connections = currentRoom->getConnections();
-    cout << "\nAvailable exits:" << endl;
+    cout << "\nAvailable exits:";
     for (size_t i = 0; i < connections.size(); i++) {
-        cout << i + 1 << ". Go to next room" << endl;
+        cout << i + 1 << ". Go to next room";
     }
     
     int choice;
     cout << "Choose a direction (0 to return to menu): ";
     cin >> choice;
     
-    if (choice > 0 && choice <= connections.size()) {
+    if (choice > 0 && choice <= static_cast<int>(connections.size())) {
         currentRoom = connections[choice - 1];
     }
 }
@@ -105,7 +108,7 @@ void Game::combat(Monster* monster) {
     }
 
     if (player.isAlive()) {
-        cout << "You defeated the " << monster->getName() << "!" << endl;
+        cout << "You defeated the " << monster->getName() << "!";
         player.setLevel(player.getLevel() + 1); // Level up after victory
     } else {
         cout << "Game Over! You were defeated by " << monster->getName() << endl;

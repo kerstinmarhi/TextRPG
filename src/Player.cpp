@@ -1,9 +1,10 @@
 #include "../include/Player.h"
 #include <iostream>
 #include "../include/Monster.h"
+#include "../include/Bag.h"
 using namespace std;
 
-Player::Player(const string& name) : name(name), health(100), level(1) { }
+Player::Player(const string& name) : name(name), health(100), level(1) {}
 
 // Getter-methods
 string Player::getName() const {
@@ -16,6 +17,10 @@ int Player::getHealth() const {
 
 int Player::getLevel() const {
     return level;
+}
+
+Bag Player::getBag() const{
+    return bag;
 }
 
 // Setter-methods
@@ -55,4 +60,8 @@ void Player::takeDamage(int damage) {
 
 bool Player::isAlive() const {
     return health > 0;
+}
+
+void Player::openBag() const {
+    bag.displayItems();
 }
