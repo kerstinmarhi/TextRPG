@@ -1,7 +1,7 @@
 #include "../include/Room.h"
 
 
-Room::Room(const string& name, std::string desc, Monster& monster) : name(name), description(desc), monster(nullptr) { }
+Room::Room(const string& name, const string& desc) : name(name), description(desc) { }
 
 string Room::getName() const {
     return name;

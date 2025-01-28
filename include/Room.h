@@ -9,19 +9,23 @@ using namespace std;
 
 class Room {
 public:
-    Room(const string& name, std::string desc, Monster& monster);
+    Room(const string& name, const string& desc);
+    //getter
     string getName() const;
-    std::string getDescription() const;
-    void setMonster(Monster* m);
+    string getDescription() const;
     Monster* getMonster();
+    //setter
+    void setMonster(Monster* m);
+    vector<Room*> getConnections();
+
     void addConnection(Room* room);
-    std::vector<Room*> getConnections();
+    
 
 private:
     string name;
-    std::string description;
+    string description;
     Monster* monster;
-    std::vector<Room*> connections;
+    vector<Room*> connections;
 };
 
 
