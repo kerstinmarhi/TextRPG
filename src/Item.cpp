@@ -1,7 +1,9 @@
 #include "../include/Item.h"
 #include "../include/Player.h"
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
-#include <random>
+#include <vector>
 using namespace std;
 
 // constructor
@@ -29,72 +31,23 @@ ItemType Item::getType() const
     return type;
 }
 
+ItemRarity Item::getRarity() const
+{
+    return rarity;
+}
+
 // Method to use Item
 void Item::use(Player& player)
 {
-    (void)player; // marks 'player' as intentionally unused.
-    /**
-     * @brief
-     * If you want to use player later in this method, feel
-     * free to delete this line. It only exists because
-     * the compiler warnings annoyed me.
-     */
-
-    cout << "You use the item: " << name << endl;
+    cout << "Using item: " << name << endl;
 }
 
 // Method to get information about an item
 void Item::showItem() const
 {
-    cout << "\n=== Item Information ===\n";
-    cout << "Name: " << name << endl;
+    cout << "Item: " << name << endl;
     cout << "Description: " << description << endl;
-    cout << "Type: ";
-    switch (type) {
-    case ItemType::FOOD:
-        cout << "Food" << endl;
-        break;
-    case ItemType::POTION:
-        cout << "Potion" << endl;
-        break;
-    case ItemType::STRENGTH_POTION: // Missing case
-        std::cout << "Strength Potion" << endl;
-        break;
-    case ItemType::WEAPON:
-        cout << "Weapon" << endl;
-        break;
-    case ItemType::ARMOUR:
-        cout << "Armour" << endl;
-        break;
-    case ItemType::OTHER:
-        cout << "Other" << endl;
-        break;
-    default:
-        std::cout << "Unknown item type!\n"; // just in case
-        break;
-    }
-    cout << "Rarity: ";
-    switch (rarity) {
-    case ItemRarity::COMMON:
-        cout << "Common";
-        break;
-    case ItemRarity::UNCOMMON:
-        cout << "Uncommon";
-        break;
-    case ItemRarity::RARE:
-        cout << "Rare";
-        break;
-    case ItemRarity::EPIC:
-        cout << "Epic";
-        break;
-    case ItemRarity::LEGENDARY:
-        cout << "Legendary";
-        break;
-    default:
-        cout << "No such thing as rarity.";
-        break;
-    }
-    cout << " (x" << getRarityMultiplier(rarity) << " multiplier)\n";
+    cout << "Rarity: " << static_cast<int>(rarity) << endl;
 }
 
 double Item::getRarityMultiplier(ItemRarity rarity)
@@ -117,124 +70,73 @@ double Item::getRarityMultiplier(ItemRarity rarity)
 
 bool Item::operator==(const Item& other) const
 {
-    return name == other.name; // Two items are the same when they have identical names.
+    return name == other.name && description == other.description && type == other.type && rarity == other.rarity;
 }
 
 ItemRarity ItemFactory::rollRarity()
 {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::discrete_distribution<> d({ 50, 30, 15, 4, 1 }); // weights for each rarity
-
-    return static_cast<ItemRarity>(d(gen));
+    int roll = rand() % 100;
+    if (roll < 50)
+        return ItemRarity::COMMON;
+    if (roll < 80)
+        return ItemRarity::UNCOMMON;
+    if (roll < 95)
+        return ItemRarity::RARE;
+    if (roll < 99)
+        return ItemRarity::EPIC;
+    return ItemRarity::LEGENDARY;
 }
 
-std::unique_ptr<Item> ItemFactory::createRandomItem()
+unique_ptr<Item> ItemFactory::createRandomItem()
 {
-    ItemRarity rarity = rollRarity();
-    int randomType = rand() % 5; // Updated to include new item type
+    srand(static_cast<unsigned int>(time(0))); // Seed for random number generation
 
-    switch (randomType) {
-    case 0:
-        return std::make_unique<Equipment>("Sword", "A sharp blade",
-            ItemType::WEAPON, rarity, 5);
-    case 1:
-        return std::make_unique<Equipment>("Shield", "A sturdy shield",
-            ItemType::ARMOUR, rarity, 10);
-    case 2:
-        return std::make_unique<Consumable>("Health Potion", "Restores health",
-            ItemType::POTION, rarity, 20);
-    case 4:
-        return std::make_unique<Consumable>("Strength Potion",
-            "Temporarily increases attack power",
-            ItemType::STRENGTH_POTION, rarity, 15);
-    default:
-        return std::make_unique<Consumable>("Bread", "Fresh and tasty",
-            ItemType::FOOD, rarity, 10);
-    }
+    vector<unique_ptr<Item>> items;
+    items.push_back(make_unique<Equipment>("Sword", "A sharp blade.", ItemType::WEAPON, rollRarity(), 10));
+    items.push_back(make_unique<Equipment>("Shield", "A sturdy shield.", ItemType::ARMOUR, rollRarity(), 8));
+    items.push_back(make_unique<Consumable>("Health Potion", "Restores health.", ItemType::POTION, rollRarity(), 20));
+    items.push_back(make_unique<Consumable>("Mana Potion", "Restores mana.", ItemType::POTION, rollRarity(), 15));
+    items.push_back(make_unique<Consumable>("Strength Potion", "Increases strength.", ItemType::STRENGTH_POTION, rollRarity(), 5));
+    items.push_back(make_unique<Consumable>("Bread", "A loaf of bread.", ItemType::FOOD, rollRarity(), 5));
+    items.push_back(make_unique<Equipment>("Helmet", "A protective helmet.", ItemType::ARMOUR, rollRarity(), 5));
+    items.push_back(make_unique<Equipment>("Armor", "A suit of armor.", ItemType::ARMOUR, rollRarity(), 15));
+    items.push_back(make_unique<Consumable>("Elixir", "A magical elixir.", ItemType::POTION, rollRarity(), 25));
+    items.push_back(make_unique<Consumable>("Apple", "A fresh apple.", ItemType::FOOD, rollRarity(), 3));
+
+    int randomIndex = rand() % items.size();
+    return move(items[randomIndex]);
 }
 
-Equipment::Equipment(const std::string& n, const std::string& d, ItemType t,
-    ItemRarity r, int bonus)
+Equipment::Equipment(const string& n, const string& d, ItemType t, ItemRarity r, int bonus)
     : Item(n, d, t, r)
-    , statBonus(bonus * getRarityMultiplier(r))
+    , statBonus(bonus)
 {
 }
 
 void Equipment::use(Player& player)
 {
-    player.equipItem(this);
+    cout << "Equipping: " << name << " with stat bonus: " << statBonus << endl;
 }
 
 void Equipment::showItem() const
 {
     Item::showItem();
-    cout << "Effect: ";
-    switch (getType()) {
-    case ItemType::WEAPON:
-        cout << "+" << statBonus << " Attack Power";
-        break;
-    case ItemType::ARMOUR:
-        cout << "+" << statBonus << " Health";
-        break;
-    default:
-        cout << "No effect";
-    }
-    cout << endl;
+    cout << "Stat Bonus: " << statBonus << endl;
 }
 
-Consumable::Consumable(const std::string& n, const std::string& d, ItemType t,
-    ItemRarity r, int power)
+Consumable::Consumable(const string& n, const string& d, ItemType t, ItemRarity r, int power)
     : Item(n, d, t, r)
-    , effectPower(power * getRarityMultiplier(r))
+    , effectPower(power)
 {
 }
 
 void Consumable::use(Player& player)
 {
-    switch (getType()) {
-    case ItemType::POTION:
-        player.setHealth(player.getHealth() + effectPower);
-        std::cout << "Used " << getName() << ". Restored "
-                  << std::min(effectPower,
-                         player.getMaxHealth() - player.getHealth())
-                  << " health! (" << player.getHealth() << "/"
-                  << player.getMaxHealth() << ")" << std::endl;
-        break;
-    case ItemType::STRENGTH_POTION:
-        player.setAPBonus(effectPower, 3); // Add temporary attack bonus for 3 turns
-        std::cout << "Used " << getName() << ". Attack increased by "
-                  << effectPower << " for 3 turns!" << std::endl;
-        break;
-    case ItemType::FOOD:
-        player.setHealth(player.getHealth() + effectPower / 2);
-        std::cout << "Ate " << getName() << ". Restored "
-                  << std::min(effectPower / 2,
-                         player.getMaxHealth() - player.getHealth())
-                  << " health! (" << player.getHealth() << "/"
-                  << player.getMaxHealth() << ")" << std::endl;
-        break;
-    default:
-        std::cout << "This item cannot be consumed." << std::endl;
-    }
+    cout << "Consuming: " << name << " with effect power: " << effectPower << endl;
 }
 
 void Consumable::showItem() const
 {
     Item::showItem();
-    cout << "Effect: ";
-    switch (getType()) {
-    case ItemType::POTION:
-        cout << "Restores " << effectPower << " Health";
-        break;
-    case ItemType::FOOD:
-        cout << "Restores " << effectPower / 2 << " Health";
-        break;
-    case ItemType::STRENGTH_POTION: // Added missing description
-        cout << "Temporarily increases Attack Power by " << effectPower << " for 3 turns";
-        break;  
-    default:
-        cout << "No effect";
-    }
-    cout << endl;
+    cout << "Effect Power: " << effectPower << endl;
 }

@@ -2,24 +2,26 @@
 #include <iostream>
 using namespace std;
 
-Game::Game() : player("Hero") {
-    // Don’t call initializeRooms() here
-    // That way, if you re-enter “Play,” it won’t reset the dungeon.
+Game::Game()
+    : player("Hero")
+    , dungeon()
+{
+    currentRoom = dungeon.getStartingRoom();
 }
 
-Game::~Game() {
+Game::~Game()
+{
     // No need to manually delete rooms, unique_ptr will handle it
 }
 
-void Game::start() {
-    if (rooms.empty()) {
-        initializeRooms();
-    }
+void Game::start()
+{
     cout << "Welcome to Dungeon-RPG!" << endl;
     mainMenu();
 }
 
-void Game::mainMenu() {
+void Game::mainMenu()
+{
     int choice;
 
     do {
@@ -28,69 +30,42 @@ void Game::mainMenu() {
         cout << "2. Player Stats\n";
         cout << "3. Bag\n";
         cout << "4. Exit Game\n";
-        cout << "5. Restart Game\n";   // new option
+        cout << "5. Restart Game\n"; // new option
         cout << "Choose an option: ";
         cin >> choice;
 
         switch (choice) {
-            case 1:
-                // Just call explore(), no new calls to initializeRooms()
-                explore();
-                break;
-            case 2:
-                player.displayStats();
-                break;
-            case 3:
-                player.openBag();
-                break;
-            case 4:
-                cout << "Game ends. Till we meet again!" << endl;
-                exit(0);
-            case 5:
-                // Explicitly reset everything
-                resetGame();
-                break;
-            default:
-                cout << "No such choice!";
+        case 1:
+            explore();
+            break;
+        case 2:
+            player.displayStats();
+            break;
+        case 3:
+            player.openBag();
+            break;
+        case 4:
+            cout << "Game ends. Till we meet again!" << endl;
+            exit(0);
+        case 5:
+            resetGame();
+            break;
+        default:
+            cout << "No such choice!";
         }
     } while (choice != 4);
 }
 
-void Game::resetGame() {
+void Game::resetGame()
+{
     cout << "\n-- Restarting Game --\n";
-    // Clear out existing rooms
-    rooms.clear();
-
-    // Re-create a fresh player
     player = Player("Hero");
-
-    // Re-initialize the dungeon
-    initializeRooms();
+    dungeon = Dungeon();
+    currentRoom = dungeon.getStartingRoom();
 }
 
-void Game::initializeRooms() {
-    auto entrance = make_unique<Room>("The Beginning", "You are at the dungeon entrance. Torches flicker on the walls.");
-    auto hallway = make_unique<Room>("Endless Darkness", "A long dark hallway stretches before you.");
-    auto bossRoom = make_unique<Room>("Throne Room", "A massive chamber with an ornate throne. The air feels heavy with malice.");
-
-    entrance->addConnection(hallway.get());
-    hallway->addConnection(entrance.get());
-    hallway->addConnection(bossRoom.get());
-    bossRoom->addConnection(hallway.get());
-
-    rooms.push_back(std::move(entrance));
-    rooms.push_back(std::move(hallway));
-    rooms.push_back(std::move(bossRoom));
-
-    rooms[1]->setMonster(make_unique<Monster>("Goblin", 50, 10, "A dubious little creature", 20));
-    rooms[2]->setMonster(make_unique<Monster>("Hobgoblin Chief", 150, 25,
-        "A massive, muscular goblin wearing crude but effective armor. A makeshift wooden crown sits upon its head.", 100));
-    rooms[2]->setIsBossRoom(true);
-
-    currentRoom = rooms[0].get();
-}
-
-void Game::explore() {
+void Game::explore()
+{
     cout << currentRoom->getDescription() << endl;
 
     // Check for monster
@@ -141,39 +116,40 @@ void Game::explore() {
     }
 }
 
-void Game::combat(Monster* monster) {
+void Game::combat(Monster* monster)
+{
     cout << "\n=== Combat Started ===\n";
     monster->showMonster();
-    
+
     int turnCount = 0;
 
     while (player.isAlive() && monster->getHealth() > 0) {
         turnCount++;
         cout << "\n=== Turn " << turnCount << " ===\n";
-        
+
         // Display combat status at the start of each turn
         cout << "\n--- Combat Status ---\n";
         cout << "Player HP: " << player.getHealth() << "\n";
         cout << monster->getName() << " HP: " << monster->getHealth() << "\n";
         if (player.getTempAPBonus() > 0) {
-            cout << "Attack Bonus: +" << player.getTempAPBonus() 
+            cout << "Attack Bonus: +" << player.getTempAPBonus()
                  << " (" << player.getTempAPDuration() << " turns remaining)\n";
         }
         cout << "-------------------\n";
-        
+
         // Player's turn
         cout << "\nYour turn:\n";
         cout << "1. Attack\n2. Use Item\n";
         cout << "Choose action: ";
         int choice;
         cin >> choice;
-        
+
         if (choice == 1) {
             player.attack(*monster);
         } else if (choice == 2) {
             player.openBag();
         }
-        
+
         // Monster's turn if still alive
         if (monster->getHealth() > 0) {
             monster->attack();
