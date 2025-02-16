@@ -1,6 +1,6 @@
 # Compiler und Flags
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17
+CXXFLAGS = -Wall -Wextra -std=c++17 -g
 
 # Ausführbare Datei
 TARGET = dungeon_rpg
@@ -20,3 +20,6 @@ $(TARGET): $(OBJS)
 # Bereinigen von generierten Dateien
 clean:
 	rm -f $(OBJS) $(TARGET)
+
+debug: $(TARGET)
+	gdb $(TARGET)
