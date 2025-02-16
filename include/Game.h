@@ -5,11 +5,12 @@
 #include "Room.h"
 #include <vector>
 #include "Dungeon.h"
+#include <memory>
 
 
 class Game {
 private:
-    std::vector<Room*> rooms;
+    std::vector<std::unique_ptr<Room>> rooms;
     Room* currentRoom;
     Player player; 
     Dungeon dungeon;

@@ -4,6 +4,7 @@
 #include <string>
 #include "Monster.h"
 #include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -14,18 +15,26 @@ public:
     string getName() const;
     string getDescription() const;
     Monster* getMonster();
+    bool getHasChest() const { return hasChest; }
+    bool getChestLooted() const { return chestLooted; }
+    bool getIsBossRoom() const { return isBossRoom; }
     //setter
-    void setMonster(Monster* m);
+    void setMonster(unique_ptr<Monster> m);
+    void setHasChest(bool has) { hasChest = has; }
+    void setIsBossRoom(bool boss) { isBossRoom = boss; }
     vector<Room*> getConnections();
 
     void addConnection(Room* room);
-    
+    void lootChest(Player& player);
 
 private:
     string name;
     string description;
-    Monster* monster;
+    std::unique_ptr<Monster> monster;  // Instead of Monster* monster
     vector<Room*> connections;
+    bool hasChest;
+    bool chestLooted;
+    bool isBossRoom;
 };
 
 

@@ -12,16 +12,18 @@ private:
     int health;   
     int attackPoints;        
     string description; 
+    int xpReward;
 
 public:
     
-    Monster(const string& n, int hp, int a, const string& d);
+    Monster(const string& n, int hp, int a, const string& d, int xpVal);
 
     // Getter-Methoden
     string getName() const;
     int getHealth() const;
     int getAttack() const;
     string getDescription() const;
+    int getXPReward() const;
 
     bool isAlive() const;
     
