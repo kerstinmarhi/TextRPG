@@ -1,10 +1,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <string>
 #include "Bag.h"
 #include "Monster.h"
 #include <memory>
+#include <string>
 using namespace std;
 
 class Player {
@@ -16,7 +16,7 @@ public:
     int getHealth() const;
     int getLevel() const;
     int getAP() const;
-    Bag& getBag();  // Return by reference instead of: Bag getBag() const (for no copying);
+    Bag& getBag(); // Return by reference instead of: Bag getBag() const (for no copying);
     int getXP() const;
     int getXPNeededForNextLevel() const;
     int getTempAPBonus() const;
@@ -42,8 +42,8 @@ public:
     void unequipItem(ItemType type);
     void showEquippedItems() const;
     void removeEquipmentStats(const Equipment* item);
-    void updateMaxHealth();  // Recalculates max health based on level and armor
-    void updateAttackPoints();  // Recalculates AP based on level and weapon
+    void updateMaxHealth(); // Recalculates max health based on level and armor
+    void updateAttackPoints(); // Recalculates AP based on level and weapon
 
 private:
     std::unique_ptr<Equipment> equippedWeapon;
@@ -52,14 +52,14 @@ private:
     int health;
     int level;
     int attackPoints = 20; // base attack damage
-    Bag bag;
+    std::unique_ptr<Bag> bag;
     int xp;
     int xpNeededForNextLevel;
     int tempAPBonus;
     int tempAPDuration;
     int maxHealth;
-    int baseMaxHealth;  // Stores base max HP without armor bonuses
-    int baseAP;  // Base attack power before bonuses
+    int baseMaxHealth; // Stores base max HP without armor bonuses
+    int baseAP; // Base attack power before bonuses
 };
 
 #endif

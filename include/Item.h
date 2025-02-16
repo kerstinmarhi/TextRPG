@@ -1,9 +1,11 @@
 #ifndef ITEM_H
 #define ITEM_H
 
-#include <string>
 #include <memory>
-#include "Player.h"
+#include <string>
+
+// Declaration forwarding
+class Player;
 
 enum class ItemType {
     WEAPON,
@@ -15,11 +17,11 @@ enum class ItemType {
 };
 
 enum class ItemRarity {
-    COMMON,     // 1.0x multiplier, 50% chance
-    UNCOMMON,   // 1.2x multiplier, 30% chance
-    RARE,       // 1.5x multiplier, 15% chance
-    EPIC,       // 2.0x multiplier, 4% chance
-    LEGENDARY   // 3.0x multiplier, 1% chance
+    COMMON, // 1.0x multiplier, 50% chance
+    UNCOMMON, // 1.2x multiplier, 30% chance
+    RARE, // 1.5x multiplier, 15% chance
+    EPIC, // 2.0x multiplier, 4% chance
+    LEGENDARY // 3.0x multiplier, 1% chance
 };
 
 class Item {
@@ -36,11 +38,11 @@ public:
     // Delete copy constructor and assignment to prevent memory issues
     Item(const Item&) = delete;
     Item& operator=(const Item&) = delete;
-    
+
     // Add move constructor and assignment
     Item(Item&&) noexcept = default;
     Item& operator=(Item&&) noexcept = default;
-    
+
     // Getters
     std::string getName() const;
     std::string getDescription() const;
@@ -59,16 +61,12 @@ protected:
     int statBonus;
 
 public:
-    Equipment(const std::string& n, const std::string& d, ItemType t, 
-             ItemRarity r, int bonus);
+    Equipment(const std::string& n, const std::string& d, ItemType t,
+        ItemRarity r, int bonus);
     void use(Player& player) override;
     void showItem() const override;
     int getStatBonus() const { return statBonus; }
 };
-
-void Equipment::use(Player& player) {
-    player.equipItem(this);
-}
 
 class Consumable : public Item {
 protected:
@@ -76,7 +74,7 @@ protected:
 
 public:
     Consumable(const std::string& n, const std::string& d, ItemType t,
-               ItemRarity r, int power);
+        ItemRarity r, int power);
     void use(Player& player) override;
     void showItem() const override;
 };
