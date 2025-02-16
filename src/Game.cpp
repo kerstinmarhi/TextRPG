@@ -49,7 +49,6 @@ void Game::initializeRooms() {
     auto hallway = make_unique<Room>("Endless Darkness", "A long dark hallway stretches before you.");
     auto bossRoom = make_unique<Room>("Throne Room", "A massive chamber with an ornate throne. The air feels heavy with malice.");
     
-    // Update connections to work with unique_ptr
     entrance->addConnection(hallway.get());
     hallway->addConnection(entrance.get());
     hallway->addConnection(bossRoom.get());
@@ -57,17 +56,16 @@ void Game::initializeRooms() {
     
     rooms.push_back(std::move(entrance));
     rooms.push_back(std::move(hallway));
-    rooms.push_back(std::move(entrance));
-    rooms.push_back(std::move(hallway));
     rooms.push_back(std::move(bossRoom));
 
-    // Add a monster to the hallway
-    hallway->setMonster(make_unique<Monster>("Goblin", 50, 10, "A dubious little creature", 20));
+    rooms[1]->setMonster(make_unique<Monster>("Goblin", 50, 10, "A dubious little creature", 20));
 
-    // Add boss to the boss room
-    bossRoom->setMonster(make_unique<Monster>("Hobgoblin Chief", 150, 25, 
+    // Add boss to the boss room (rooms[2])
+    rooms[2]->setMonster(make_unique<Monster>("Hobgoblin Chief", 150, 25, 
         "A massive, muscular goblin wearing crude but effective armor. A makeshift wooden crown sits upon its head.", 100));
-    bossRoom->setIsBossRoom(true);
+    rooms[2]->setIsBossRoom(true);
+    //set currentRoom to rooms[0], so we start at "The Beginning"
+    currentRoom = rooms[0].get();
 }
 
 void Game::explore() {
@@ -105,7 +103,7 @@ void Game::explore() {
     vector<Room*> connections = currentRoom->getConnections();
     cout << "\nAvailable exits:";
     for (size_t i = 0; i < connections.size(); i++) {
-        cout << i + 1 << ". Go to next room";
+        cout << i + 1 << ". Go to next room\n";
     }
     
     int choice;
