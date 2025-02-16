@@ -230,6 +230,9 @@ void Consumable::showItem() const
     case ItemType::FOOD:
         cout << "Restores " << effectPower / 2 << " Health";
         break;
+    case ItemType::STRENGTH_POTION: // Added missing description
+        cout << "Temporarily increases Attack Power by " << effectPower << " for 3 turns";
+        break;  
     default:
         cout << "No effect";
     }
