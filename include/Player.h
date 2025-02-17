@@ -22,11 +22,13 @@ public:
     int getTempAPBonus() const;
     int getTempAPDuration() const;
     int getMaxHealth() const { return maxHealth; }
+    Weakness getSpellBonus() const;
     // Setter-methods
     void setName(const string& name);
     void setHealth(int health);
     void setLevel(int level);
     void setAP(int attackPoints);
+    void setSpellBonus(Weakness bonus);
 
     void displayStats() const; // show player stats
     void attack(Monster& monster) const;
@@ -60,6 +62,7 @@ private:
     int maxHealth;
     int baseMaxHealth; // Stores base max HP without armor bonuses
     int baseAP; // Base attack power before bonuses
+    Weakness spellBonus;
 };
 
 #endif

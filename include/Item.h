@@ -13,6 +13,9 @@ enum class ItemType {
     POTION,
     FOOD,
     STRENGTH_POTION,
+    POISON_SPELL,
+    FIRE_SPELL,
+    FREEZE_SPELL,
     OTHER
 };
 
