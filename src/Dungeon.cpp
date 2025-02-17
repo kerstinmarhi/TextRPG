@@ -56,19 +56,14 @@ void Dungeon::initializeRooms()
     rooms[2]->setIsBossRoom(true);
     rooms[3]->setMonster(Monster::generateMonster(2));
     rooms[4]->setMonster(Monster::generateMonster(2));
-    rooms[5]->setMonster(Monster::generateMonster(3));
+    rooms[5]->setMonster(Monster::generateMonster(1));
     rooms[6]->setMonster(Monster::generateMonster(1));
-    rooms[7]->setMonster(Monster::generateMonster(2));
-    rooms[8]->setMonster(Monster::generateMonster(1));
-    rooms[9]->setMonster(Monster::generateMonster(2));
+    rooms[7]->setMonster(Monster::generateMonster(1));
+    rooms[8]->setMonster(Monster::generateMonster(2));
+    rooms[9]->setMonster(Monster::generateMonster(1));
 }
 
 Room* Dungeon::getStartingRoom() const
 {
     return rooms[0].get();
-}
-
-void Dungeon::explore()
-{
-    // Implementation of explore method
 }

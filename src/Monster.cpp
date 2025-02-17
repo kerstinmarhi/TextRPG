@@ -15,7 +15,7 @@ Monster::Monster(const string& n, int hp, int a, const string& d, int xpVal)
 {
 }
 
-// Getter methods
+//--------- Getter methods ----------------------
 string Monster::getName() const
 {
     return name;
@@ -41,12 +41,12 @@ int Monster::getXPReward() const
     return xpReward;
 }
 
+//----------------- Monster actions ----------------
 void Monster::attack() const
 {
     cout << name << " attacks with a value of " << attackPoints << " points!" << endl;
 }
 
-// Method to take damage
 void Monster::takeDamage(int damage)
 {
     health -= damage;
