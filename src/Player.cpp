@@ -23,7 +23,7 @@ Player::Player(const string& name)
 {
 }
 
-//------------ Getter-methods ----------------
+// Getter-methods
 string Player::getName() const
 {
     return name;
@@ -69,7 +69,7 @@ int Player::getAP() const
     return attackPoints + tempAPBonus;
 }
 
-//--------- Setter-methods ----------------------------
+// Setter-methods
 void Player::setName(const string& name)
 {
     this->name = name;
@@ -97,7 +97,6 @@ void Player::setAPBonus(int bonus, int duration)
     tempAPDuration = duration;
 }
 
-//--------- Other methods ----------------------------
 void Player::displayStats() const
 {
     cout << "\n--- Player Stats ---\n";
