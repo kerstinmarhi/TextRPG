@@ -10,18 +10,22 @@ class Monster {
 private:
     string name;        
     int health;   
-    int attackPoints;        
+    int attackPoints;
+    double critChance;
+    double critMultiplier;        
     string description; 
     int xpReward;
 
 public:
     
-    Monster(const string& n, int hp, int a, const string& d, int xpVal);
+    Monster(const string& n, int hp, int a, double cc, double cm, const string& d, int xpVal);
 
     // Getter-Methoden
     string getName() const;
     int getHealth() const;
     int getAttack() const;
+    double getCritChance() const;
+    double getCritMultiplier() const;
     string getDescription() const;
     int getXPReward() const;
 
