@@ -20,6 +20,7 @@ Player::Player(const string& name)
     , maxHealth(100)
     , baseMaxHealth(100)
     , baseAP(10)
+    , spellBonus(Weakness::NONE)
 {
 }
 
@@ -69,6 +70,11 @@ int Player::getAP() const
     return attackPoints + tempAPBonus;
 }
 
+Weakness Player::getSpellBonus() const
+{
+    return spellBonus;
+}
+
 // Setter-methods
 void Player::setName(const string& name)
 {
@@ -97,6 +103,11 @@ void Player::setAPBonus(int bonus, int duration)
     tempAPDuration = duration;
 }
 
+void Player::setSpellBonus(Weakness bonus)
+{
+    spellBonus = bonus;
+}
+
 void Player::displayStats() const
 {
     cout << "\n--- Player Stats ---\n";
@@ -117,7 +128,15 @@ void Player::displayStats() const
 void Player::attack(Monster& monster) const
 {
     cout << name << " attacks " << monster.getName() << " for " << attackPoints << " damage!" << endl;
-    monster.takeDamage(attackPoints);
+
+    if (this->getSpellBonus() == monster.getWeakness())
+    {
+        cout << monster.getName() << " is double weak to this spell! (-" << attackPoints * 2 << ")" << endl;
+        monster.takeDamage(attackPoints * 2);
+    } else 
+    {
+        monster.takeDamage(attackPoints);
+    }
 }
 
 void Player::takeDamage(int damage)
@@ -178,8 +197,9 @@ void Player::updateBuffs()
     if (tempAPDuration > 0) {
         tempAPDuration--;
         if (tempAPDuration == 0) {
-            std::cout << "Strength potion effect wore off!" << std::endl;
+            std::cout << "Potion/spell effect wore off!" << std::endl;
             tempAPBonus = 0;
+            spellBonus = Weakness::NONE;
         }
     }
 }

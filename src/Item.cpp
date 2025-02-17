@@ -66,6 +66,15 @@ void Item::showItem() const
     case ItemType::ARMOUR:
         cout << "Armour" << endl;
         break;
+    case ItemType::POISON_SPELL:
+        cout << "Poison Spell" << endl;
+        break;
+    case ItemType::FIRE_SPELL:
+        cout << "Fire Spell" << endl;
+        break;
+    case ItemType::FREEZE_SPELL:
+        cout << "Freeze Spell" << endl;
+        break;
     case ItemType::OTHER:
         cout << "Other" << endl;
         break;
@@ -132,7 +141,7 @@ ItemRarity ItemFactory::rollRarity()
 std::unique_ptr<Item> ItemFactory::createRandomItem()
 {
     ItemRarity rarity = rollRarity();
-    int randomType = rand() % 5; // Updated to include new item type
+    int randomType = rand() % 7; // Updated to include new item type
 
     switch (randomType) {
     case 0:
@@ -144,10 +153,19 @@ std::unique_ptr<Item> ItemFactory::createRandomItem()
     case 2:
         return std::make_unique<Consumable>("Health Potion", "Restores health",
             ItemType::POTION, rarity, 20);
+    case 3:
+        return std::make_unique<Consumable>("Poison Spell", "Deals damage and slows enemies down",
+            ItemType::POISON_SPELL, rarity, 15);
     case 4:
         return std::make_unique<Consumable>("Strength Potion",
             "Temporarily increases attack power",
             ItemType::STRENGTH_POTION, rarity, 15);
+    case 5:
+        return std::make_unique<Consumable>("Fire Spell", "Burns monsters alive",
+            ItemType::FIRE_SPELL, rarity, 30);
+    case 6:
+        return std::make_unique<Consumable>("Freeze Spell", "Monsters can't move quickly with this effect",
+            ItemType::FREEZE_SPELL, rarity, 5);
     default:
         return std::make_unique<Consumable>("Bread", "Fresh and tasty",
             ItemType::FOOD, rarity, 10);
@@ -214,6 +232,24 @@ void Consumable::use(Player& player)
                   << " health! (" << player.getHealth() << "/"
                   << player.getMaxHealth() << ")" << std::endl;
         break;
+    case ItemType::POISON_SPELL:
+        player.setSpellBonus(Weakness::POISON);
+        player.setAPBonus(effectPower, 2);
+        std::cout << "Used " << getName() << ". Attack increased by "
+                  << effectPower << " for 2 turns! The enemy is slowed down!" << std::endl;
+        break;
+    case ItemType::FIRE_SPELL:
+        player.setSpellBonus(Weakness::FIRE);
+        player.setAPBonus(effectPower, 1);
+        std::cout << "Used " << getName() << ". A fire blast with "
+                  << effectPower << " damage has been released!" << std::endl;
+        break;
+    case ItemType::FREEZE_SPELL:
+        player.setSpellBonus(Weakness::FREEZE);
+        player.setAPBonus(effectPower, 3);
+        std::cout << "Used " << getName() << ". Attack increased by "
+                  << effectPower << " for 3 turns! The enemy is slowed down!" << std::endl;
+        break;
     default:
         std::cout << "This item cannot be consumed." << std::endl;
     }
@@ -232,7 +268,16 @@ void Consumable::showItem() const
         break;
     case ItemType::STRENGTH_POTION: // Added missing description
         cout << "Temporarily increases Attack Power by " << effectPower << " for 3 turns";
-        break;  
+        break;
+    case ItemType::POISON_SPELL:
+        cout << "Temporarily increases Attack Power by " << effectPower << " for 2 turns";
+        break;
+    case ItemType::FIRE_SPELL:
+        cout << "Temporarily increases Attack Power by " << effectPower << " for one attack";
+        break;
+    case ItemType::FREEZE_SPELL:
+        cout << "Temporarily increases Attack Power by " << effectPower << " for 3 turns";
+        break;
     default:
         cout << "No effect";
     }
