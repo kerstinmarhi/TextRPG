@@ -166,6 +166,36 @@ std::unique_ptr<Item> ItemFactory::createRandomItem()
     case 6:
         return std::make_unique<Consumable>("Freeze Spell", "Monsters can't move quickly with this effect",
             ItemType::FREEZE_SPELL, rarity, 5);
+    case 7:
+        return std::make_unique<Consumable>("Mana Potion", "Restores mana",
+            ItemType::POTION, rarity, 25);
+    case 8:
+        return std::make_unique<Consumable>("Elixir", "A magical elixir",
+            ItemType::POTION, rarity, 35);
+    case 9:
+        return std::make_unique<Consumable>("Apple", "A fresh apple",
+            ItemType::FOOD, rarity, 3);
+    case 10:
+        return std::make_unique<Consumable>("Bread", "Fresh and tasty",
+            ItemType::FOOD, rarity, 10);
+    case 11:
+        return std::make_unique<Equipment>("Helmet", "A protective helmet",
+            ItemType::ARMOUR, rarity, 5);
+    case 12:
+        return std::make_unique<Equipment>("Armor", "A suit of armor",
+            ItemType::ARMOUR, rarity, 15);
+    case 13:
+        return std::make_unique<Consumable>("Energy Drink", "Boosts energy",
+            ItemType::FOOD, rarity, 10);
+    case 14:
+        return std::make_unique<Consumable>("Magic Scroll", "Casts a powerful spell",
+            ItemType::OTHER, rarity, 50);
+    case 15:
+        return std::make_unique<Consumable>("Antidote", "Cures poison",
+            ItemType::OTHER, rarity, 0);
+    case 16:
+        return std::make_unique<Consumable>("Golden Apple", "Restores a large amount of health",
+            ItemType::FOOD, rarity, 50);
     default:
         return std::make_unique<Consumable>("Bread", "Fresh and tasty",
             ItemType::FOOD, rarity, 10);
