@@ -1,8 +1,8 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include <string>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -10,22 +10,27 @@ enum class Weakness {
     NONE,
     POISON,
     FIRE,
-    FREEZE
+    FREEZE,
+    LIGHT,
+    HOLY,
+    SILVER,
+    BLUNT,
+    ICE,
+    LIGHTNING
 };
 
 class Monster {
 private:
-    string name;        
-    int health;   
+    string name;
+    int health;
     int attackPoints;
     double critChance;
     double critMultiplier;
-    Weakness weakness;        
-    string description; 
+    Weakness weakness;
+    string description;
     int xpReward;
 
 public:
-    
     Monster(const string& n, int hp, int a, double cc, double cm, Weakness w, const string& d, int xpVal);
 
     // Getter-Methoden
@@ -39,7 +44,7 @@ public:
     int getXPReward() const;
 
     bool isAlive() const;
-    
+
     void attack() const;
 
     void takeDamage(int damage);

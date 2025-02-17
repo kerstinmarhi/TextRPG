@@ -141,7 +141,7 @@ ItemRarity ItemFactory::rollRarity()
 std::unique_ptr<Item> ItemFactory::createRandomItem()
 {
     ItemRarity rarity = rollRarity();
-    int randomType = rand() % 7; // Updated to include new item type
+    int randomType = rand() % 17; // Updated to include new item types
 
     switch (randomType) {
     case 0:
@@ -280,6 +280,9 @@ void Consumable::use(Player& player)
         std::cout << "Used " << getName() << ". Attack increased by "
                   << effectPower << " for 3 turns! The enemy is slowed down!" << std::endl;
         break;
+    case ItemType::OTHER:
+        std::cout << "Used " << getName() << ". It has a special effect!" << std::endl;
+        break;
     default:
         std::cout << "This item cannot be consumed." << std::endl;
     }
@@ -307,6 +310,9 @@ void Consumable::showItem() const
         break;
     case ItemType::FREEZE_SPELL:
         cout << "Temporarily increases Attack Power by " << effectPower << " for 3 turns";
+        break;
+    case ItemType::OTHER:
+        cout << "Has a special effect";
         break;
     default:
         cout << "No effect";
