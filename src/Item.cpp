@@ -147,7 +147,7 @@ ItemRarity ItemFactory::rollRarity()
 std::unique_ptr<Item> ItemFactory::createRandomItem()
 {
     ItemRarity rarity = rollRarity();
-    int randomType = rand() % 7; // Updated to include new item type
+    int randomType = rand() % 17; // Updated to include new item types
 
     switch (randomType) {
     case 0:
@@ -172,6 +172,36 @@ std::unique_ptr<Item> ItemFactory::createRandomItem()
     case 6:
         return std::make_unique<Consumable>("Freeze Spell", "Monsters can't move quickly with this effect",
             ItemType::FREEZE_SPELL, rarity, 25, 5);
+    case 7:
+        return std::make_unique<Consumable>("Mana Potion", "Restores mana",
+            ItemType::POTION, rarity, 25);
+    case 8:
+        return std::make_unique<Consumable>("Elixir", "A magical elixir",
+            ItemType::POTION, rarity, 35);
+    case 9:
+        return std::make_unique<Consumable>("Apple", "A fresh apple",
+            ItemType::FOOD, rarity, 3);
+    case 10:
+        return std::make_unique<Consumable>("Bread", "Fresh and tasty",
+            ItemType::FOOD, rarity, 10);
+    case 11:
+        return std::make_unique<Equipment>("Helmet", "A protective helmet",
+            ItemType::ARMOUR, rarity, 5);
+    case 12:
+        return std::make_unique<Equipment>("Armor", "A suit of armor",
+            ItemType::ARMOUR, rarity, 15);
+    case 13:
+        return std::make_unique<Consumable>("Energy Drink", "Boosts energy",
+            ItemType::FOOD, rarity, 10);
+    case 14:
+        return std::make_unique<Consumable>("Magic Scroll", "Casts a powerful spell",
+            ItemType::OTHER, rarity, 50);
+    case 15:
+        return std::make_unique<Consumable>("Antidote", "Cures poison",
+            ItemType::OTHER, rarity, 0);
+    case 16:
+        return std::make_unique<Consumable>("Golden Apple", "Restores a large amount of health",
+            ItemType::FOOD, rarity, 50);
     default:
         return std::make_unique<Consumable>("Bread", "Fresh and tasty",
             ItemType::FOOD, rarity, 10, 10);
@@ -256,6 +286,9 @@ void Consumable::use(Player& player)
         std::cout << "Used " << getName() << ". Attack increased by "
                   << effectPower << " for 3 turns! The enemy is slowed down!" << std::endl;
         break;
+    case ItemType::OTHER:
+        std::cout << "Used " << getName() << ". It has a special effect!" << std::endl;
+        break;
     default:
         std::cout << "This item cannot be consumed." << std::endl;
     }
@@ -283,6 +316,9 @@ void Consumable::showItem() const
         break;
     case ItemType::FREEZE_SPELL:
         cout << "Temporarily increases Attack Power by " << effectPower << " for 3 turns";
+        break;
+    case ItemType::OTHER:
+        cout << "Has a special effect";
         break;
     default:
         cout << "No effect";

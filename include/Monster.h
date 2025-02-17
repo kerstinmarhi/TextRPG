@@ -1,8 +1,8 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include <string>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -10,13 +10,19 @@ enum class Weakness {
     NONE,
     POISON,
     FIRE,
-    FREEZE
+    FREEZE,
+    LIGHT,
+    HOLY,
+    SILVER,
+    BLUNT,
+    ICE,
+    LIGHTNING
 };
 
 class Monster {
 private:
-    string name;        
-    int health;   
+    string name;
+    int health;
     int attackPoints;
     Weakness weakness;        
     string description; 
@@ -35,7 +41,7 @@ public:
     int getXPReward() const;
 
     bool isAlive() const;
-    
+
     void attack() const;
 
     void takeDamage(int damage);
