@@ -28,6 +28,7 @@ public:
 
     void addConnection(Room* room);
     void lootChest(Player& player);
+    void openShop(Player& player);
 
 private:
     string name;

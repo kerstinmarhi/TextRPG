@@ -2,8 +2,8 @@
 #include <iostream>
 using namespace std;
 
-Monster::Monster(const string& n, int hp, int a, double cc, double cm, Weakness w, const string& d, int xpVal)
-    : name(n), health(hp), attackPoints(a), critChance(cc), critMultiplier(cm), weakness(w), description(d), xpReward(xpVal) {}
+Monster::Monster(const string& n, int hp, int a, Weakness w, const string& d, int xpVal)
+    : name(n), health(hp), attackPoints(a), weakness(w), description(d), xpReward(xpVal) {}
 
 // Getter-Methoden
 string Monster::getName() const {
@@ -16,14 +16,6 @@ int Monster::getHealth() const {
 
 int Monster::getAttack() const {
     return attackPoints;
-}
-
-double Monster::getCritChance() const {
-    return critChance;
-}
-
-double Monster::getCritMultiplier() const {
-    return critMultiplier;
 }
 
 Weakness Monster::getWeakness() const {
@@ -44,13 +36,6 @@ void Monster::attack() const {
 
 // Methode, um Schaden zu nehmen
 void Monster::takeDamage(int damage) {
-    double roll = (double)rand() / RAND_MAX; // random number between 0.0 and 1.0
-
-    if (roll < critChance) {
-        damage *= critMultiplier;
-        cout << "Critical Hit! " << damage << " damage dealt!" << endl;
-    }
-
     health -= damage;
     if (health < 0) {
         health = 0; // no negative health
