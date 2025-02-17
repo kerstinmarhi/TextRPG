@@ -1,19 +1,16 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
 
-#include "Room.h"
-#include <memory>
 #include <vector>
+#include "Room.h"
 
 class Dungeon {
 public:
     Dungeon();
     void explore();
-    void initializeRooms();
-    Room* getStartingRoom() const;
 
 private:
-    std::vector<std::unique_ptr<Room>> rooms;
+    std::vector<Room> rooms;
     void generateRooms();
 };
 
