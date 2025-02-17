@@ -122,6 +122,13 @@ void Player::attack(Monster& monster) const
 
 void Player::takeDamage(int damage)
 {
+    if (equippedArmor != nullptr) { // If armor is equipped, reduce damage
+        damage -= equippedArmor->getStatBonus();
+        if (damage < 0) {
+            damage = 0;
+        }
+    }
+
     health -= damage;
     if (health < 0)
         health = 0;
@@ -263,4 +270,10 @@ void Player::updateAttackPoints()
     if (equippedWeapon) {
         attackPoints += equippedWeapon->getStatBonus();
     }
+}
+
+void Player::addHealth(int healthPoints)
+{
+    setHealth(health + healthPoints);
+    cout << name << " gains " << healthPoints << " health points. Total health: " << health << endl;
 }

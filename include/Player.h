@@ -44,6 +44,7 @@ public:
     void removeEquipmentStats(const Equipment* item);
     void updateMaxHealth(); // Recalculates max health based on level and armor
     void updateAttackPoints(); // Recalculates AP based on level and weapon
+    void addHealth(int healthPoints);
 
 private:
     std::unique_ptr<Equipment> equippedWeapon;
