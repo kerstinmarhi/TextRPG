@@ -33,9 +33,10 @@ protected:
     std::string description;
     ItemType type;
     ItemRarity rarity;
+    int price;
 
 public:
-    Item(const std::string& n, const std::string& d, ItemType t, ItemRarity r);
+    Item(const std::string& n, const std::string& d, ItemType t, ItemRarity r, int p);
     virtual ~Item() = default;
 
     // Delete copy constructor and assignment to prevent memory issues
@@ -51,6 +52,7 @@ public:
     std::string getDescription() const;
     ItemType getType() const;
     ItemRarity getRarity() const;
+    int getPrice() const;
 
     virtual void use(Player& player);
     virtual void showItem() const;
@@ -65,7 +67,7 @@ protected:
 
 public:
     Equipment(const std::string& n, const std::string& d, ItemType t,
-        ItemRarity r, int bonus);
+        ItemRarity r, int p, int bonus);
     void use(Player& player) override;
     void showItem() const override;
     int getStatBonus() const { return statBonus; }
@@ -77,7 +79,7 @@ protected:
 
 public:
     Consumable(const std::string& n, const std::string& d, ItemType t,
-        ItemRarity r, int power);
+        ItemRarity r, int p, int power);
     void use(Player& player) override;
     void showItem() const override;
 };

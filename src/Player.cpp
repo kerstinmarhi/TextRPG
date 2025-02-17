@@ -2,6 +2,7 @@
 #include "../include/Bag.h"
 #include "../include/Monster.h"
 #include <iostream>
+#include <random>
 using namespace std;
 
 // Update constructor to set base AP
@@ -21,6 +22,10 @@ Player::Player(const string& name)
     , baseMaxHealth(100)
     , baseAP(10)
     , spellBonus(Weakness::NONE)
+    , initiative(0.5)
+    , critChance(0.1)
+    , precision(0.5)
+    , balance(0)
 {
 }
 
@@ -75,6 +80,26 @@ Weakness Player::getSpellBonus() const
     return spellBonus;
 }
 
+double Player::getInitiative() const
+{
+    return initiative;
+}
+
+double Player::getCritChance() const
+{
+    return critChance;
+}
+
+double Player::getPrecision() const
+{
+    return precision;
+}
+
+int Player::getBalance() const
+{
+    return balance;
+}
+
 // Setter-methods
 void Player::setName(const string& name)
 {
@@ -108,6 +133,26 @@ void Player::setSpellBonus(Weakness bonus)
     spellBonus = bonus;
 }
 
+void Player::setInitiative(double initiative)
+{
+    this->initiative = initiative;
+}
+
+void Player::setCritChance(double critChance)
+{
+    this->critChance = critChance;
+}
+
+void Player::setPrecision(double precision)
+{
+    this->precision = precision;
+}
+
+void Player::setBalance(int balance)
+{
+    this->balance = balance;
+}
+
 void Player::displayStats() const
 {
     cout << "\n--- Player Stats ---\n";
@@ -127,16 +172,40 @@ void Player::displayStats() const
 
 void Player::attack(Monster& monster) const
 {
-    cout << name << " attacks " << monster.getName() << " for " << attackPoints << " damage!" << endl;
+    // hit or miss
+    if (isInLikelihood(precision)) {
+        int currentAttackPoints = attackPoints;
 
-    if (this->getSpellBonus() == monster.getWeakness())
+        if (isInLikelihood(critChance)) {
+            currentAttackPoints *= 1.5;
+            cout << "Critical hit!" << endl;
+        }
+        cout << name << " attacks " << monster.getName() << " for " << currentAttackPoints << " damage!" << endl;
+
+        if (this->getSpellBonus() == monster.getWeakness())
+        {
+            cout << monster.getName() << " is double weak to this spell! (-" << currentAttackPoints * 2 << ")" << endl;
+            monster.takeDamage(currentAttackPoints * 2);
+        } 
+        else 
+        {
+            monster.takeDamage(currentAttackPoints);
+        }
+    } 
+    else
     {
-        cout << monster.getName() << " is double weak to this spell! (-" << attackPoints * 2 << ")" << endl;
-        monster.takeDamage(attackPoints * 2);
-    } else 
-    {
-        monster.takeDamage(attackPoints);
-    }
+        cout << "Hit missed!" << endl;
+    } 
+}
+
+// determines if the attributes initiative, critChance or precision apply
+bool Player::isInLikelihood(double likelihood) const
+{
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_real_distribution<double> dist(0.0, 1.0);
+
+    return likelihood > dist(gen);
 }
 
 void Player::takeDamage(int damage)
@@ -184,11 +253,35 @@ void Player::checkLevelUp()
 
         updateMaxHealth(); // Update max health on level up
         updateAttackPoints(); // Update AP on level up
+        updateInitiative();
+        updatePrecision();
+        updateCritChance();
 
         health = maxHealth; // Heal to full on level up
         cout << "You leveled up! New level: " << level << endl;
         cout << "Max health increased to " << maxHealth << "!" << endl;
         cout << "Attack Power increased to " << attackPoints << "!" << endl;
+
+        if (initiative == 1.0)
+        {
+            cout << "Initiative maxed out!";
+        } else {
+            cout << "You now have a " << initiative*100 << "% chance to attack first!" << endl;
+        }
+        
+        if (precision == 1.0)
+        {
+            cout << "Precision maxed out!";
+        } else {
+            cout << "Hit rate increased to " << precision*100 << "%!" << endl;
+        }
+        
+        if (critChance == 1.0)
+        {
+            cout << "Critical hitting maxed out!";
+        } else {
+            cout << "Critical hits have now a " << critChance*100 << "% success rate!" << endl;
+        }
     }
 }
 
@@ -282,5 +375,26 @@ void Player::updateAttackPoints()
     // Add weapon bonus if equipped
     if (equippedWeapon) {
         attackPoints += equippedWeapon->getStatBonus();
+    }
+}
+
+void Player::updateInitiative()
+{
+    if (initiative < 1.0) {
+        initiative += 0.1; 
+    }
+}
+
+void Player::updateCritChance()
+{
+    if (critChance < 1.0) {
+        critChance += 0.1; 
+    }
+}
+
+void Player::updatePrecision()
+{
+    if (precision < 1.0) {
+        precision += 0.1; 
     }
 }
