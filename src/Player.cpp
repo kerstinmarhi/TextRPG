@@ -25,6 +25,7 @@ Player::Player(const string& name)
     , initiative(0.5)
     , critChance(0.1)
     , precision(0.5)
+    , balance(0)
 {
 }
 
@@ -94,6 +95,11 @@ double Player::getPrecision() const
     return precision;
 }
 
+int Player::getBalance() const
+{
+    return balance;
+}
+
 // Setter-methods
 void Player::setName(const string& name)
 {
@@ -140,6 +146,11 @@ void Player::setCritChance(double critChance)
 void Player::setPrecision(double precision)
 {
     this->precision = precision;
+}
+
+void Player::setBalance(int balance)
+{
+    this->balance = balance;
 }
 
 void Player::displayStats() const

@@ -26,6 +26,7 @@ public:
     double getInitiative() const;
     double getCritChance() const;
     double getPrecision() const;
+    int getBalance() const;
     // Setter-methods
     void setName(const string& name);
     void setHealth(int health);
@@ -35,6 +36,7 @@ public:
     void setInitiative(double initiative);
     void setCritChance(double critChance);
     void setPrecision(double precision);
+    void setBalance(int balance);
 
     void displayStats() const; // show player stats
     void attack(Monster& monster) const;
@@ -76,6 +78,7 @@ private:
     double initiative; // likelihood of going first in battle
     double critChance; // likelihood of landing a critical hit
     double precision; // likelihood of hitting or missing an attack
+    int balance; // for interactions with the shop feature
 };
 
 #endif

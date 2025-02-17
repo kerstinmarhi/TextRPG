@@ -5,11 +5,12 @@
 using namespace std;
 
 // constructor
-Item::Item(const string& n, const string& d, ItemType t, ItemRarity r)
+Item::Item(const string& n, const string& d, ItemType t, ItemRarity r, int p)
     : name(n)
     , description(d)
     , type(t)
     , rarity(r)
+    , price(p)
 {
 }
 
@@ -27,6 +28,11 @@ string Item::getDescription() const
 ItemType Item::getType() const
 {
     return type;
+}
+
+int Item::getPrice() const
+{
+    return price;
 }
 
 // Method to use Item
@@ -146,35 +152,35 @@ std::unique_ptr<Item> ItemFactory::createRandomItem()
     switch (randomType) {
     case 0:
         return std::make_unique<Equipment>("Sword", "A sharp blade",
-            ItemType::WEAPON, rarity, 5);
+            ItemType::WEAPON, rarity, 10, 5);
     case 1:
         return std::make_unique<Equipment>("Shield", "A sturdy shield",
-            ItemType::ARMOUR, rarity, 10);
+            ItemType::ARMOUR, rarity, 20, 10);
     case 2:
         return std::make_unique<Consumable>("Health Potion", "Restores health",
-            ItemType::POTION, rarity, 20);
+            ItemType::POTION, rarity, 30, 20);
     case 3:
         return std::make_unique<Consumable>("Poison Spell", "Deals damage and slows enemies down",
-            ItemType::POISON_SPELL, rarity, 15);
+            ItemType::POISON_SPELL, rarity, 40, 15);
     case 4:
         return std::make_unique<Consumable>("Strength Potion",
             "Temporarily increases attack power",
-            ItemType::STRENGTH_POTION, rarity, 15);
+            ItemType::STRENGTH_POTION, rarity, 40, 15);
     case 5:
         return std::make_unique<Consumable>("Fire Spell", "Burns monsters alive",
-            ItemType::FIRE_SPELL, rarity, 30);
+            ItemType::FIRE_SPELL, rarity, 50, 30);
     case 6:
         return std::make_unique<Consumable>("Freeze Spell", "Monsters can't move quickly with this effect",
-            ItemType::FREEZE_SPELL, rarity, 5);
+            ItemType::FREEZE_SPELL, rarity, 25, 5);
     default:
         return std::make_unique<Consumable>("Bread", "Fresh and tasty",
-            ItemType::FOOD, rarity, 10);
+            ItemType::FOOD, rarity, 10, 10);
     }
 }
 
 Equipment::Equipment(const std::string& n, const std::string& d, ItemType t,
-    ItemRarity r, int bonus)
-    : Item(n, d, t, r)
+    ItemRarity r, int p, int bonus)
+    : Item(n, d, t, r, p)
     , statBonus(bonus * getRarityMultiplier(r))
 {
 }
@@ -202,8 +208,8 @@ void Equipment::showItem() const
 }
 
 Consumable::Consumable(const std::string& n, const std::string& d, ItemType t,
-    ItemRarity r, int power)
-    : Item(n, d, t, r)
+    ItemRarity r, int p, int power)
+    : Item(n, d, t, r, p)
     , effectPower(power * getRarityMultiplier(r))
 {
 }

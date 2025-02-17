@@ -49,3 +49,42 @@ void Room::lootChest(Player& player) {
     chestLooted = true;
 }
 
+void Room::openShop(Player& player)
+{
+    std::vector<std::unique_ptr<Item>> items;
+
+    // 4 items will be randomly generated
+    for (size_t i = 0; i < 4; ++i) {
+        items.push_back(ItemFactory::createRandomItem());
+    }
+
+    int choice = 1;
+
+    while(choice != 0)
+    {
+        cout << "\nYour current balance is " << player.getBalance() << " coins." << endl;
+        cout << "Which item would you like to choose?" << endl;
+
+        for (int i = 0; i < (int)items.size(); ++i) {
+            cout << i + 1 << ". " << items[i]->getName() << "(" << items[i]->getPrice() << " coins)" << std::endl;
+        }
+        cout << "(0) if you want to exit: ";
+
+        cin >> choice;
+
+        if (choice != 0)
+        {
+            if (player.getBalance() < items[choice-1]->getPrice())
+            {
+                cout << "Not enough coins!" << endl;
+            }
+            else
+            {
+                cout << items[choice-1]->getName() << " successfully bought!" << endl;
+                player.setBalance(player.getBalance() - items[choice-1]->getPrice());
+                player.addItemToBag(std::move(items[choice-1]));
+                items.erase(items.begin() + (choice - 1));
+            }
+        }
+    }
+}

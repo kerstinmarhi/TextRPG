@@ -82,8 +82,8 @@ void Game::initializeRooms() {
     rooms.push_back(std::move(hallway));
     rooms.push_back(std::move(bossRoom));
 
-    rooms[1]->setMonster(make_unique<Monster>("Goblin", 50, 10, Weakness::POISON, "A dubious little creature", 20));
-    rooms[2]->setMonster(make_unique<Monster>("Hobgoblin Chief", 150, 25, Weakness::FREEZE,
+    rooms[1]->setMonster(make_unique<Monster>("Goblin", 20, 10, Weakness::POISON, "A dubious little creature", 20));
+    rooms[2]->setMonster(make_unique<Monster>("Hobgoblin Chief", 20, 25, Weakness::FREEZE,
         "A massive, muscular goblin wearing crude but effective armor. A makeshift wooden crown sits upon its head.", 100));
     rooms[2]->setIsBossRoom(true);
 
@@ -106,6 +106,18 @@ void Game::explore() {
             currentRoom->setHasChest(true);
         }
 
+        if (player.isAlive()) {
+            if (currentRoom->getIsBossRoom())
+            {
+                player.setBalance(player.getBalance() + 50);
+                cout << "Player gained 50 coins!" << endl;
+            } else {
+                player.setBalance(player.getBalance() + 25);
+                cout << "Player gained 25 coins!" << endl;
+            }
+            
+        }
+
         // Remove monster after combat
         currentRoom->setMonster(nullptr);
     }
@@ -119,6 +131,19 @@ void Game::explore() {
 
         if (choice == 1) {
             currentRoom->lootChest(player);
+        }
+    }
+
+    if(currentRoom->getIsBossRoom())
+    {
+        cout << "\nYou can buy something from the boss shop!" << endl;
+        cout << "Do you want to buy something? (1: Yes, 0: No): ";
+        int buyChoice;
+        cin >> buyChoice;
+
+        if (buyChoice == 1)
+        {
+            currentRoom->openShop(player);
         }
     }
 
