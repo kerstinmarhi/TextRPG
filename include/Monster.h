@@ -6,19 +6,27 @@
 
 using namespace std;
 
+enum class Weakness {
+    NONE,
+    POISON,
+    FIRE,
+    FREEZE
+};
+
 class Monster {
 private:
     string name;        
     int health;   
     int attackPoints;
     double critChance;
-    double critMultiplier;        
+    double critMultiplier;
+    Weakness weakness;        
     string description; 
     int xpReward;
 
 public:
     
-    Monster(const string& n, int hp, int a, double cc, double cm, const string& d, int xpVal);
+    Monster(const string& n, int hp, int a, double cc, double cm, Weakness w, const string& d, int xpVal);
 
     // Getter-Methoden
     string getName() const;
@@ -26,6 +34,7 @@ public:
     int getAttack() const;
     double getCritChance() const;
     double getCritMultiplier() const;
+    Weakness getWeakness() const;
     string getDescription() const;
     int getXPReward() const;
 
