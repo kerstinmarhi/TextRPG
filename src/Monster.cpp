@@ -69,34 +69,34 @@ void Monster::showMonster() const
     cout << "Attack: " << attackPoints << endl;
 }
 
-unique_ptr<Monster> Monster::generateMonster(int tier)
+unique_ptr<Monster> Monster::generateMonster(int level)
 {
     srand(static_cast<unsigned int>(time(0))); // Seed for random number generation
 
-    vector<Monster> tier1Monsters = {
+    vector<Monster> level1Monsters = {
         Monster("Goblin", 50, 10, "A dubious little creature", 20),
         Monster("Skeleton", 40, 8, "A reanimated skeleton", 15),
         Monster("Zombie", 60, 12, "A slow-moving undead", 25)
     };
 
-    vector<Monster> tier2Monsters = {
+    vector<Monster> level2Monsters = {
         Monster("Orc", 80, 15, "A brutish orc", 30),
         Monster("Dark Mage", 60, 20, "A mage who has succumbed to the dark arts", 40),
         Monster("Werewolf", 100, 18, "A ferocious werewolf", 50)
     };
 
-    vector<Monster> tier3Monsters = {
+    vector<Monster> level3Monsters = {
         Monster("Hobgoblin Chief", 150, 25, "A massive, muscular goblin wearing crude but effective armor. A makeshift wooden crown sits upon its head.", 100),
         Monster("Shadow Assassin", 90, 30, "A silent killer lurking in the shadows", 50),
         Monster("Dragon", 200, 35, "A fearsome dragon with scales as hard as steel", 150)
     };
 
-    vector<vector<Monster>> monstersByTier = { tier1Monsters, tier2Monsters, tier3Monsters };
+    vector<vector<Monster>> monstersByLevel = { level1Monsters, level2Monsters, level3Monsters };
 
-    if (tier < 1 || tier > static_cast<int>(monstersByTier.size())) {
+    if (level < 1 || level > static_cast<int>(monstersByLevel.size())) {
         throw invalid_argument("Invalid level");
     }
 
-    int randomIndex = rand() % monstersByTier[tier - 1].size();
-    return make_unique<Monster>(monstersByTier[tier - 1][randomIndex]);
+    int randomIndex = rand() % monstersByLevel[level - 1].size();
+    return make_unique<Monster>(monstersByLevel[level - 1][randomIndex]);
 }

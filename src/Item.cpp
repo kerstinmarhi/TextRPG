@@ -115,11 +115,6 @@ Equipment::Equipment(const string& n, const string& d, ItemType t, ItemRarity r,
 
 void Equipment::use(Player& player)
 {
-    if (type == ItemType::WEAPON) {
-        player.equipItem(this);
-    } else if (type == ItemType::ARMOUR) {
-        player.equipItem(this);
-    }
     cout << "Equipping: " << name << " with stat bonus: " << statBonus << endl;
 }
 
@@ -138,13 +133,6 @@ Consumable::Consumable(const string& n, const string& d, ItemType t, ItemRarity 
 void Consumable::use(Player& player)
 {
     cout << "Consuming: " << name << " with effect power: " << effectPower << endl;
-    if (type == ItemType::POTION) {
-        player.addHealth(effectPower);
-    } else if (type == ItemType::FOOD) {
-        player.addHealth(effectPower);
-    } else if (type == ItemType::STRENGTH_POTION) {
-        player.setAPBonus(effectPower, 3);
-    }
 }
 
 void Consumable::showItem() const
