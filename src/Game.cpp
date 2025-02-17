@@ -186,27 +186,27 @@ void Game::initializeRooms()
     rooms.push_back(std::move(crypt2));
 
     rooms[1]->setMonster(make_unique<Monster>("Goblin", 20, 10, Weakness::POISON, "A dubious little creature", 20));
-    rooms[2]->setMonster(make_unique<Monster>("Hobgoblin Chief", 20, 25, Weakness::FREEZE,
+    rooms[2]->setMonster(make_unique<Monster>("Hobgoblin Chief", 100, 25, Weakness::FREEZE,
         "A massive, muscular goblin wearing crude but effective armor. A makeshift wooden crown sits upon its head.", 100));
     rooms[2]->setIsBossRoom(true);
-    rooms[3]->setMonster(make_unique<Monster>("Orc", 80, 15, 0.3, 1.8, Weakness::FIRE, "A brutish orc", 30));
-    rooms[4]->setMonster(make_unique<Monster>("Dark Mage", 60, 20, 0.5, 2.5, Weakness::LIGHT, "A mage who has succumbed to the dark arts", 40));
-    rooms[5]->setMonster(make_unique<Monster>("Werewolf", 100, 18, 0.25, 2.0, Weakness::SILVER, "A ferocious werewolf", 50));
-    rooms[6]->setMonster(make_unique<Monster>("Troll", 120, 22, 0.2, 1.7, Weakness::FIRE, "A large, slow-moving troll", 60));
-    rooms[7]->setMonster(make_unique<Monster>("Vampire", 90, 25, 0.35, 2.2, Weakness::LIGHT, "A blood-sucking vampire", 70));
-    rooms[8]->setMonster(make_unique<Monster>("Skeleton", 40, 8, 0.4, 1.5, Weakness::BLUNT, "A reanimated skeleton", 15));
-    rooms[9]->setMonster(make_unique<Monster>("Zombie", 60, 12, 0.3, 1.6, Weakness::FIRE, "A slow-moving undead", 25));
-    rooms[10]->setMonster(make_unique<Monster>("Bat", 30, 5, 0.5, 1.2, Weakness::LIGHT, "A small, flying creature", 10));
-    rooms[11]->setMonster(make_unique<Monster>("Rat", 20, 3, 0.6, 1.1, Weakness::POISON, "A large, aggressive rat", 5));
-    rooms[12]->setMonster(make_unique<Monster>("Shadow Assassin", 90, 30, 0.4, 2.5, Weakness::LIGHT, "A silent killer lurking in the shadows", 50));
-    rooms[13]->setMonster(make_unique<Monster>("Lich", 180, 28, 0.3, 2.0, Weakness::HOLY, "An undead sorcerer with powerful magic", 120));
-    rooms[14]->setMonster(make_unique<Monster>("Giant", 220, 32, 0.2, 1.8, Weakness::FIRE, "A towering giant with immense strength", 140));
-    rooms[15]->setMonster(make_unique<Monster>("Hobgoblin", 100, 25, 0.2, 1.5, Weakness::FREEZE, "A massive, muscular goblin wearing crude but effective armor.", 100));
-    rooms[16]->setMonster(make_unique<Monster>("Dragon", 200, 35, 0.1, 3.0, Weakness::ICE, "A fearsome dragon with scales as hard as steel", 150));
-    rooms[17]->setMonster(make_unique<Monster>("Demon Lord", 250, 40, 0.15, 2.8, Weakness::HOLY, "A powerful demon with dark magic", 200));
-    rooms[18]->setMonster(make_unique<Monster>("Ancient Dragon", 300, 45, 0.1, 3.5, Weakness::ICE, "An ancient dragon with immense power", 250));
-    rooms[19]->setMonster(make_unique<Monster>("Titan", 350, 50, 0.05, 4.0, Weakness::LIGHTNING, "A colossal titan with unmatched strength", 300));
-    rooms[20]->setMonster(make_unique<Monster>("Lich", 180, 28, 0.3, 2.0, Weakness::HOLY, "An undead sorcerer with powerful magic", 120));
+    rooms[3]->setMonster(make_unique<Monster>("Orc", 80, 15, Weakness::FIRE, "A brutish orc", 30));
+    rooms[4]->setMonster(make_unique<Monster>("Dark Mage", 60, 20, Weakness::LIGHT, "A mage who has succumbed to the dark arts", 40));
+    rooms[5]->setMonster(make_unique<Monster>("Werewolf", 100, 18, Weakness::SILVER, "A ferocious werewolf", 50));
+    rooms[6]->setMonster(make_unique<Monster>("Troll", 120, 22, Weakness::FIRE, "A large, slow-moving troll", 60));
+    rooms[7]->setMonster(make_unique<Monster>("Vampire", 90, 25, Weakness::LIGHT, "A blood-sucking vampire", 70));
+    rooms[8]->setMonster(make_unique<Monster>("Skeleton", 40, 8, Weakness::BLUNT, "A reanimated skeleton", 15));
+    rooms[9]->setMonster(make_unique<Monster>("Zombie", 60, 12, Weakness::FIRE, "A slow-moving undead", 25));
+    rooms[10]->setMonster(make_unique<Monster>("Bat", 30, 5, Weakness::LIGHT, "A small, flying creature", 10));
+    rooms[11]->setMonster(make_unique<Monster>("Rat", 20, 3, Weakness::POISON, "A large, aggressive rat", 5));
+    rooms[12]->setMonster(make_unique<Monster>("Shadow Assassin", 90, 30, Weakness::LIGHT, "A silent killer lurking in the shadows", 50));
+    rooms[13]->setMonster(make_unique<Monster>("Lich", 180, 28, Weakness::HOLY, "An undead sorcerer with powerful magic", 120));
+    rooms[14]->setMonster(make_unique<Monster>("Giant", 220, 32, Weakness::FIRE, "A towering giant with immense strength", 140));
+    rooms[15]->setMonster(make_unique<Monster>("Hobgoblin", 100, 25, Weakness::FREEZE, "A massive, muscular goblin wearing crude but effective armor.", 100));
+    rooms[16]->setMonster(make_unique<Monster>("Dragon", 200, 35, Weakness::ICE, "A fearsome dragon with scales as hard as steel", 150));
+    rooms[17]->setMonster(make_unique<Monster>("Demon Lord", 250, 40, Weakness::HOLY, "A powerful demon with dark magic", 200));
+    rooms[18]->setMonster(make_unique<Monster>("Ancient Dragon", 300, 45, Weakness::ICE, "An ancient dragon with immense power", 250));
+    rooms[19]->setMonster(make_unique<Monster>("Titan", 350, 50, Weakness::LIGHTNING, "A colossal titan with unmatched strength", 300));
+    rooms[20]->setMonster(make_unique<Monster>("Lich", 180, 28, Weakness::HOLY, "An undead sorcerer with powerful magic", 120));
 
     currentRoom = rooms[0].get();
 }
