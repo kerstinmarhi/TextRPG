@@ -82,8 +82,8 @@ void Game::initializeRooms() {
     rooms.push_back(std::move(hallway));
     rooms.push_back(std::move(bossRoom));
 
-    rooms[1]->setMonster(make_unique<Monster>("Goblin", 50, 10, 0.4, 2.0, Weakness::POISON, "A dubious little creature", 20));
-    rooms[2]->setMonster(make_unique<Monster>("Hobgoblin Chief", 150, 25, 0.2, 1.5, Weakness::FREEZE,
+    rooms[1]->setMonster(make_unique<Monster>("Goblin", 50, 10, Weakness::POISON, "A dubious little creature", 20));
+    rooms[2]->setMonster(make_unique<Monster>("Hobgoblin Chief", 150, 25, Weakness::FREEZE,
         "A massive, muscular goblin wearing crude but effective armor. A makeshift wooden crown sits upon its head.", 100));
     rooms[2]->setIsBossRoom(true);
 
@@ -141,6 +141,22 @@ void Game::explore() {
     }
 }
 
+void performMonsterTurn(Player& player, Monster* monster)
+{
+    // Monster's turn if still alive
+    if (monster->getHealth() > 0) {
+        if (monster->getWeakness() == player.getSpellBonus())
+        {
+            monster->attack();
+            cout << "But is weak due to a spell effect! (x0.75 attack damage)" << endl;
+            player.takeDamage(monster->getAttack() * 0.75);
+        } else {
+            monster->attack();
+            player.takeDamage(monster->getAttack());
+        }
+    }
+}
+
 void Game::combat(Monster* monster) {
     cout << "\n=== Combat Started ===\n";
     monster->showMonster();
@@ -167,24 +183,19 @@ void Game::combat(Monster* monster) {
         cout << "Choose action: ";
         int choice;
         cin >> choice;
-        
-        if (choice == 1) {
-            player.attack(*monster);
-        } else if (choice == 2) {
+
+        if (choice == 2) {
             player.openBag();
         }
-        
-        // Monster's turn if still alive
-        if (monster->getHealth() > 0) {
-            if (monster->getWeakness() == player.getSpellBonus())
-            {
-                monster->attack();
-                cout << "But is weak due to a spell effect! (x0.75 attack damage)" << endl;
-                player.takeDamage(monster->getAttack() * 0.75);
-            } else {
-                monster->attack();
-                player.takeDamage(monster->getAttack());
-            }
+
+        // determine who starts
+        if(player.isInLikelihood(player.getInitiative()))
+        {
+            player.attack(*monster);
+            performMonsterTurn(player, monster);
+        } else {
+            performMonsterTurn(player, monster);
+            player.attack(*monster);
         }
 
         // Update buff durations

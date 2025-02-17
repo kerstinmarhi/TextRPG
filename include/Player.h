@@ -23,12 +23,18 @@ public:
     int getTempAPDuration() const;
     int getMaxHealth() const { return maxHealth; }
     Weakness getSpellBonus() const;
+    double getInitiative() const;
+    double getCritChance() const;
+    double getPrecision() const;
     // Setter-methods
     void setName(const string& name);
     void setHealth(int health);
     void setLevel(int level);
     void setAP(int attackPoints);
     void setSpellBonus(Weakness bonus);
+    void setInitiative(double initiative);
+    void setCritChance(double critChance);
+    void setPrecision(double precision);
 
     void displayStats() const; // show player stats
     void attack(Monster& monster) const;
@@ -46,6 +52,10 @@ public:
     void removeEquipmentStats(const Equipment* item);
     void updateMaxHealth(); // Recalculates max health based on level and armor
     void updateAttackPoints(); // Recalculates AP based on level and weapon
+    bool isInLikelihood(double likelihood) const;
+    void updateInitiative();
+    void updateCritChance();
+    void updatePrecision();
 
 private:
     std::unique_ptr<Equipment> equippedWeapon;
@@ -63,6 +73,9 @@ private:
     int baseMaxHealth; // Stores base max HP without armor bonuses
     int baseAP; // Base attack power before bonuses
     Weakness spellBonus;
+    double initiative; // likelihood of going first in battle
+    double critChance; // likelihood of landing a critical hit
+    double precision; // likelihood of hitting or missing an attack
 };
 
 #endif
