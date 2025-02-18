@@ -18,7 +18,9 @@ enum class Weakness {
     ICE,
     LIGHTNING
 };
-
+inline bool operator==(const Weakness& lhs, const Weakness& rhs) {
+    return static_cast<int>(lhs) == static_cast<int>(rhs);
+}
 class Monster {
 private:
     string name;

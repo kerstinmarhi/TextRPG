@@ -20,10 +20,12 @@ public:
     bool getHasChest() const { return hasChest; }
     bool getChestLooted() const { return chestLooted; }
     bool getIsBossRoom() const { return isBossRoom; }
+    bool wasVisited() const { return visited; }
     // setter
     void setMonster(unique_ptr<Monster> m);
     void setHasChest(bool has) { hasChest = has; }
     void setIsBossRoom(bool boss) { isBossRoom = boss; }
+    void setVisited(bool v) { visited = v; }
     vector<Room*> getConnections();
 
     void addConnection(Room* room);
@@ -38,6 +40,7 @@ private:
     bool hasChest;
     bool chestLooted;
     bool isBossRoom;
+    bool visited = false;  // Add this member
 };
 
 #endif
