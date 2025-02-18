@@ -45,4 +45,12 @@ void Bag::useItem(size_t index, Player& player) {
 
 bool Bag::isEmpty() const{
     return items.empty();
-};
+}
+
+Item* Bag::getItem(size_t index) const {
+    return items[index].get();
+}
+
+size_t Bag::size() const {
+    return items.size();
+}

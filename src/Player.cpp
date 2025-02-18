@@ -3,6 +3,7 @@
 #include "../include/Monster.h"
 #include <iostream>
 #include <random>
+#include <algorithm>
 using namespace std;
 
 // Update constructor to set base AP
@@ -75,6 +76,10 @@ int Player::getAP() const
     return attackPoints + tempAPBonus;
 }
 
+const std::vector<Weakness>& Player::getActiveSpellBonuses() const {
+    return activeSpellBonuses;
+}
+
 Weakness Player::getSpellBonus() const
 {
     return spellBonus;
@@ -128,9 +133,9 @@ void Player::setAPBonus(int bonus, int duration)
     tempAPDuration = duration;
 }
 
-void Player::setSpellBonus(Weakness bonus)
-{
-    spellBonus = bonus;
+void Player::setSpellBonus(Weakness bonus) {
+    clearSpellBonuses();  // Clear old bonuses
+    addSpellBonus(bonus); // Add new bonus
 }
 
 void Player::setInitiative(double initiative)
@@ -157,24 +162,47 @@ void Player::displayStats() const
 {
     cout << "\n--- Player Stats ---\n";
     cout << "Name: " << name << "\n";
-    cout << "Health: " << health << "\n";
+    cout << "Health: " << health << "/" << maxHealth << "\n";
     cout << "Level: " << level << "\n";
     cout << "Attack Power: " << attackPoints;
     if (tempAPBonus > 0) {
         cout << " (+" << tempAPBonus << " for " << tempAPDuration << " turns)";
     }
     cout << "\n";
+    
+    // Add combat stats
+    cout << "Initiative: " << (initiative * 100) << "% chance to attack first\n";
+    cout << "Precision: " << (precision * 100) << "% hit chance\n";
+    cout << "Critical: " << (critChance * 100) << "% crit chance\n";
+    
+    // Show active spell effects
+    if (!activeSpellBonuses.empty()) {
+        cout << "Active Spell Effects: ";
+        for (Weakness bonus : activeSpellBonuses) {
+            switch (bonus) {
+                case Weakness::SILVER: cout << "Silver "; break;
+                case Weakness::HOLY: cout << "Holy "; break;
+                case Weakness::FIRE: cout << "Fire "; break;
+                case Weakness::ICE: cout << "Ice "; break;
+                case Weakness::LIGHTNING: cout << "Lightning "; break;
+                case Weakness::LIGHT: cout << "Light "; break;
+                case Weakness::POISON: cout << "Poison "; break;
+                case Weakness::FREEZE: cout << "Freeze "; break;
+                case Weakness::BLUNT: cout << "Blunt "; break;
+                default: break;
+            }
+        }
+        cout << "\n";
+    }
 
     cout << "\n--- Equipped Items ---\n";
     cout << "Weapon: " << (equippedWeapon ? equippedWeapon->getName() : "None") << "\n";
     cout << "Armor: " << (equippedArmor ? equippedArmor->getName() : "None") << "\n";
 }
 
-void Player::attack(Monster& monster) const
-{
-    // hit or miss
+void Player::attack(Monster& monster) const {
     if (isInLikelihood(precision)) {
-        int currentAttackPoints = attackPoints;
+        int currentAttackPoints = getAP();
 
         if (isInLikelihood(critChance)) {
             currentAttackPoints *= 1.5;
@@ -182,20 +210,16 @@ void Player::attack(Monster& monster) const
         }
         cout << name << " attacks " << monster.getName() << " for " << currentAttackPoints << " damage!" << endl;
 
-        if (this->getSpellBonus() == monster.getWeakness())
-        {
-            cout << monster.getName() << " is double weak to this spell! (-" << currentAttackPoints * 2 << ")" << endl;
+        // Check if any active spell bonus matches the monster's weakness
+        if (hasSpellBonus(monster.getWeakness())) {
+            cout << monster.getName() << " is double weak to your spell effect! (-" << currentAttackPoints * 2 << ")" << endl;
             monster.takeDamage(currentAttackPoints * 2);
-        } 
-        else 
-        {
+        } else {
             monster.takeDamage(currentAttackPoints);
         }
-    } 
-    else
-    {
+    } else {
         cout << "Hit missed!" << endl;
-    } 
+    }
 }
 
 // determines if the attributes initiative, critChance or precision apply
@@ -253,46 +277,64 @@ void Player::checkLevelUp()
 
         updateMaxHealth(); // Update max health on level up
         updateAttackPoints(); // Update AP on level up
-        updateInitiative();
-        updatePrecision();
-        updateCritChance();
 
         health = maxHealth; // Heal to full on level up
         cout << "You leveled up! New level: " << level << endl;
         cout << "Max health increased to " << maxHealth << "!" << endl;
         cout << "Attack Power increased to " << attackPoints << "!" << endl;
 
-        if (initiative == 1.0)
-        {
-            cout << "Initiative maxed out!";
-        } else {
-            cout << "You now have a " << initiative*100 << "% chance to attack first!" << endl;
-        }
+        // Present stat upgrade choice
+        cout << "\nChoose a stat to improve:\n";
+        cout << "1. Initiative (currently " << initiative*100 << "% chance to attack first)\n";
+        cout << "2. Precision (currently " << precision*100 << "% hit chance)\n";
+        cout << "3. Critical Hit (currently " << critChance*100 << "% crit chance)\n";
+        cout << "Enter your choice (1-3): ";
         
-        if (precision == 1.0)
-        {
-            cout << "Precision maxed out!";
-        } else {
-            cout << "Hit rate increased to " << precision*100 << "%!" << endl;
-        }
-        
-        if (critChance == 1.0)
-        {
-            cout << "Critical hitting maxed out!";
-        } else {
-            cout << "Critical hits have now a " << critChance*100 << "% success rate!" << endl;
+        int choice;
+        cin >> choice;
+
+        switch(choice) {
+            case 1:
+                if (initiative < 1.0) {
+                    initiative += 0.1;
+                    cout << "Initiative increased! Now " << initiative*100 << "% chance to attack first!\n";
+                } else {
+                    cout << "Initiative already maxed out!\n";
+                }
+                break;
+                
+            case 2:
+                if (precision < 1.0) {
+                    precision += 0.1;
+                    cout << "Precision increased! Now " << precision*100 << "% hit chance!\n";
+                } else {
+                    cout << "Precision already maxed out!\n";
+                }
+                break;
+                
+            case 3:
+                if (critChance < 1.0) {
+                    critChance += 0.1;
+                    cout << "Critical chance increased! Now " << critChance*100 << "% crit chance!\n";
+                } else {
+                    cout << "Critical chance already maxed out!\n";
+                }
+                break;
+                
+            default:
+                cout << "Invalid choice. No stat increased.\n";
+                break;
         }
     }
 }
 
-void Player::updateBuffs()
-{
+void Player::updateBuffs() {
     if (tempAPDuration > 0) {
         tempAPDuration--;
         if (tempAPDuration == 0) {
-            std::cout << "Potion/spell effect wore off!" << std::endl;
+            std::cout << "Potion/spell effects wore off!" << std::endl;
             tempAPBonus = 0;
-            spellBonus = Weakness::NONE;
+            clearSpellBonuses();  // Clear all spell bonuses when duration expires
         }
     }
 }
@@ -316,6 +358,12 @@ void Player::equipItem(Equipment* item)
     switch (item->getType()) {
     case ItemType::WEAPON:
         updateAttackPoints(); // Recalculate AP with new weapon
+        baseInitiative += item->getInitiativeBonus();
+        basePrecision += item->getPrecisionBonus();
+        baseCritChance += item->getCritChanceBonus();
+        if (item->getElementalBonus() != Weakness::NONE) {
+            addSpellBonus(item->getElementalBonus());
+        }
         break;
     case ItemType::ARMOUR:
         updateMaxHealth(); // Recalculate max health with new armor
@@ -346,11 +394,43 @@ void Player::removeEquipmentStats(const Equipment* item)
 void Player::unequipItem(ItemType type)
 {
     auto& slot = (type == ItemType::WEAPON) ? equippedWeapon : equippedArmor;
+    if (!slot) return;
 
-    if (slot) {
-        removeEquipmentStats(slot.get());
-        slot.reset();
+    Equipment* item = slot.get();
+
+    // Remove direct stat contributions
+    removeEquipmentStats(item);
+
+    // Subtract base stat bonuses from the equipped item
+    switch (item->getType()) {
+    case ItemType::WEAPON:
+        baseInitiative -= item->getInitiativeBonus();
+        basePrecision -= item->getPrecisionBonus();
+        baseCritChance -= item->getCritChanceBonus();
+        // Remove elemental bonus if any
+        if (item->getElementalBonus() != Weakness::NONE) {
+            auto it = std::find_if(activeSpellBonuses.begin(), activeSpellBonuses.end(),
+                [&item](const Weakness& w) { 
+                    return static_cast<int>(w) == static_cast<int>(item->getElementalBonus()); 
+                });
+            if (it != activeSpellBonuses.end()) {
+                activeSpellBonuses.erase(it);
+            }
+        }
+        // Recalculate AP after removing the weapon
+        updateAttackPoints();
+        break;
+    case ItemType::ARMOUR:
+        // Recalculate max health after removing armor
+        updateMaxHealth();
+        health = std::min(health, maxHealth);
+        break;
+    default:
+        break;
     }
+
+    std::cout << "Unequipped " << item->getName() << "\n";
+    slot.reset();
 }
 
 void Player::updateMaxHealth()
@@ -378,23 +458,18 @@ void Player::updateAttackPoints()
     }
 }
 
-void Player::updateInitiative()
-{
-    if (initiative < 1.0) {
-        initiative += 0.1; 
-    }
+
+void Player::addSpellBonus(Weakness bonus) {
+    activeSpellBonuses.push_back(bonus);
 }
 
-void Player::updateCritChance()
-{
-    if (critChance < 1.0) {
-        critChance += 0.1; 
-    }
+void Player::clearSpellBonuses() {
+    activeSpellBonuses.clear();
 }
 
-void Player::updatePrecision()
-{
-    if (precision < 1.0) {
-        precision += 0.1; 
-    }
+bool Player::hasSpellBonus(Weakness bonus) const {
+    return std::find_if(activeSpellBonuses.begin(), activeSpellBonuses.end(),
+        [bonus](const Weakness& w) { 
+            return static_cast<int>(w) == static_cast<int>(bonus); 
+        }) != activeSpellBonuses.end();
 }

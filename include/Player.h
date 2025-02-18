@@ -5,6 +5,7 @@
 #include "Monster.h"
 #include <memory>
 #include <string>
+#include <vector>
 using namespace std;
 
 class Player {
@@ -27,6 +28,8 @@ public:
     double getCritChance() const;
     double getPrecision() const;
     int getBalance() const;
+    const std::vector<Weakness>& getActiveSpellBonuses() const;  // New method
+    bool hasSpellBonus(Weakness bonus) const;  // New method
     // Setter-methods
     void setName(const string& name);
     void setHealth(int health);
@@ -58,6 +61,8 @@ public:
     void updateInitiative();
     void updateCritChance();
     void updatePrecision();
+    void addSpellBonus(Weakness bonus);  // New method
+    void clearSpellBonuses();           // New method
 
 private:
     std::unique_ptr<Equipment> equippedWeapon;
@@ -75,10 +80,14 @@ private:
     int baseMaxHealth; // Stores base max HP without armor bonuses
     int baseAP; // Base attack power before bonuses
     Weakness spellBonus;
+    std::vector<Weakness> activeSpellBonuses;  // Replace single spellBonus
     double initiative; // likelihood of going first in battle
     double critChance; // likelihood of landing a critical hit
     double precision; // likelihood of hitting or missing an attack
     int balance; // for interactions with the shop feature
+    int baseInitiative;
+    int basePrecision;
+    int baseCritChance;
 };
 
 #endif

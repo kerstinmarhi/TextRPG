@@ -14,6 +14,8 @@ public:
     void displayItems() const;
     void useItem(size_t index, Player& player);
     bool isEmpty() const;
+    Item* getItem(size_t index) const;   // Add this
+    size_t size() const;                // Add this
 private:
     vector<unique_ptr<Item>> items;
 };

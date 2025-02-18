@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <string>
+#include <vector>  // Add this
+#include "Monster.h" // Add this for Weakness enum
 
 // Declaration forwarding
 class Player;
@@ -16,7 +18,13 @@ enum class ItemType {
     POISON_SPELL,
     FIRE_SPELL,
     FREEZE_SPELL,
-    OTHER
+    OTHER,
+    LIGHT_SPELL,
+    HOLY_SPELL,
+    SILVER_SPELL,
+    BLUNT_SPELL,
+    ICE_SPELL,
+    LIGHTNING_SPELL
 };
 
 enum class ItemRarity {
@@ -64,13 +72,21 @@ public:
 class Equipment : public Item {
 protected:
     int statBonus;
-
+    int initiativeBonus;    
+    int precisionBonus;     
+    int critChanceBonus;    
+    Weakness elementalBonus; 
 public:
     Equipment(const std::string& n, const std::string& d, ItemType t,
-        ItemRarity r, int p, int bonus);
+        ItemRarity r, int p, int bonus, int initBonus = 0, int precBonus = 0, int critBonus = 0,
+        Weakness elem = Weakness::NONE);
     void use(Player& player) override;
     void showItem() const override;
     int getStatBonus() const { return statBonus; }
+    int getInitiativeBonus() const { return initiativeBonus; }
+    int getPrecisionBonus() const { return precisionBonus; }
+    int getCritChanceBonus() const { return critChanceBonus; }
+    Weakness getElementalBonus() const { return elementalBonus; }
 };
 
 class Consumable : public Item {
@@ -88,6 +104,7 @@ class ItemFactory {
 public:
     static std::unique_ptr<Item> createRandomItem();
     static ItemRarity rollRarity();
+    static void addSpecialWeapons(std::vector<std::unique_ptr<Item>>& items); // Add std::
 };
 
 #endif
