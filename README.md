@@ -15,3 +15,11 @@ make
 
 run with: 
 .\dungeon_rpg.exe
+
+clean .o and .exe files:
+make clean
+
+debug:
+make debug
+gdb dungeon_rpg
+run

@@ -2,8 +2,8 @@
 #include <iostream>
 using namespace std;
 
-Monster::Monster(const string& n, int hp, int a, const string& d)
-    : name(n), health(hp), attackPoints(a), description(d) {}
+Monster::Monster(const string& n, int hp, int a, Weakness w, const string& d, int xpVal)
+    : name(n), health(hp), attackPoints(a), weakness(w), description(d), xpReward(xpVal) {}
 
 // Getter-Methoden
 string Monster::getName() const {
@@ -18,8 +18,16 @@ int Monster::getAttack() const {
     return attackPoints;
 }
 
+Weakness Monster::getWeakness() const {
+    return weakness;
+}
+
 string Monster::getDescription() const {
     return description;
+}
+
+int Monster::getXPReward() const {
+    return xpReward;
 }
 
 void Monster::attack() const {
@@ -34,7 +42,9 @@ void Monster::takeDamage(int damage) {
     }
     cout << name << " has " << health << " health points left." << endl;
 }
-
+bool Monster::isAlive() const {
+    return health > 0;
+}
 void Monster::showMonster() const {
     cout << "Monster: " << name << endl;
     cout << "Description: " << description << endl;
